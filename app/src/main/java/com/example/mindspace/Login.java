@@ -24,7 +24,7 @@ public class Login extends AppCompatActivity {
 
 
         btn.setOnClickListener(e -> {
-            String emailValue = validateInput(email,6);
+            String emailValue = new InputValidator(email).validate();
             Log.i("Login", "email:" + emailValue);
             Log.i("Login", password.getText().toString());
 
@@ -33,21 +33,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    String validateInput(EditText input,int minLenght) {
 
-        String value = input.getText().toString();
-
-        if (value.isEmpty()) {
-            input.setError("Input is empty");
-            return null;
-        }
-        if(value.length()<minLenght){
-            input.setError("Input should be "+minLenght+"chars");
-            return null;
-        }
-        return value;
-
-    }
 
 
 }
