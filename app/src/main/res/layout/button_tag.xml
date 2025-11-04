@@ -1,0 +1,16 @@
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tag_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:background="@drawable/button_rect"
+    android:minWidth="70dp"
+    android:minHeight="0dp"
+    android:padding="0dp"
+    android:text=""
+    android:textAllCaps="false"
+    android:textColor="@color/white"
+    android:textSize="8dp"
+
+    />
+

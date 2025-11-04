@@ -12,9 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
       
-        setContentView(R.layout.notes_page);
-//        Intent intent = new Intent(MainActivity.this, Login.class);
-//        startActivity(intent);
+        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(MainActivity.this, NotePage.class);
+        startActivity(intent);
 
     }
 
