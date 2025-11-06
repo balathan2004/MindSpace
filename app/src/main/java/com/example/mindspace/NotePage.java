@@ -24,8 +24,8 @@ public class NotePage extends AppCompatActivity {
 
     LinearLayout chipGroup;
 
-    private final List<String> initNames = Arrays.asList("Cowsika", "Siri", "Harini", "Suvetha");
-    private List<String> names = new ArrayList<String>(initNames);
+    //    private final List<String> initNames = Arrays.asList("Cowsika", "Siri", "Harini", "Suvetha");
+    private List<String> names = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,8 @@ public class NotePage extends AppCompatActivity {
 
 
         submitButton.setOnClickListener(e -> {
-            String note_title = new InputValidator(title).validate();
-            String note_text = new InputValidator(note).validate();
+            String note_title = new InputValidator(title).setMinLength(50).validate();
+            String note_text = new InputValidator(note).setMinLength(50).validate();
 
             if (note_title == null || note_text == null) {
                 Log.i("Note", "Value is empty");
@@ -68,19 +68,20 @@ public class NotePage extends AppCompatActivity {
 
             if (EditorInfo.IME_ACTION_SEND == actionId) {
 
-
-                String tag_name = new InputValidator(tag_input).validate();
+                String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
 
                 if (tag_name != null) {
                     Log.i("Note", tag_name);
                     names.add(tag_name);
                     renderNameChips();
                 }
+
                 return true;
             }
             return false;
         });
         chipGroup.addView(tag_input);
+        tag_input.requestFocus();
     }
 
     private void renderNameChips() {
@@ -133,7 +134,7 @@ public class NotePage extends AppCompatActivity {
 
 
             // You can add your actual filtering logic here!
-            Toast.makeText(NotePage.this, "Removed: " + selectedName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(NotePage.this, "Reset to default", Toast.LENGTH_SHORT).show();
         });
         return button;
     }

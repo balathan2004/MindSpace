@@ -5,11 +5,18 @@ import android.widget.EditText;
 public class InputValidator {
 
     private EditText input;
-    private int MinLen=6;
+    private int MinLen = 3;
 
     public InputValidator(EditText input) {
         this.input = input;
     }
+
+    public InputValidator setMinLength(int minLength) {
+        this.MinLen = minLength;
+        return this;
+    }
+
+    // Optional: restore a default min length
 
 
     String validate() {
