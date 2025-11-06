@@ -23,7 +23,10 @@
                 android:id="@+id/tag_chip_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
         </HorizontalScrollView>
 
         <ScrollView
