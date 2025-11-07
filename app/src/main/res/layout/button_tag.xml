@@ -1,16 +1,15 @@
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tag_btn"
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tag_chip"
+    style="@style/Widget.MaterialComponents.Chip.Entry"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="2dp"
-    android:background="@drawable/button_rect"
-    android:minWidth="70dp"
-    android:minHeight="0dp"
-    android:padding="0dp"
-    android:text=""
-    android:textAllCaps="false"
+    android:clickable="true"
+    android:focusable="true"
+    android:textAlignment="center"
     android:textColor="@color/white"
-    android:textSize="8dp"
-
-    />
-
+    app:chipStrokeColor="@color/black"
+    android:textSize="14sp"
+    app:chipBackgroundColor="@color/chip_bg"
+    app:chipCornerRadius="16dp"
+    app:closeIconVisible="true" />

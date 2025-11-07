@@ -101,7 +101,7 @@ public class NotePage extends AppCompatActivity {
 
         for (String name : names) {
 
-            Button button = renderSingleChip(inflater, name);
+            Chip button = (Chip) renderSingleChip(inflater, name);
 
             chipGroup.addView(button);
         }
@@ -116,7 +116,7 @@ public class NotePage extends AppCompatActivity {
 
 
     private Button renderSingleChip(LayoutInflater inflater, String name) {
-        Button button = (Button) inflater.inflate(R.layout.button_tag, chipGroup, false);
+        Chip button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
         button.setText(name);
 
 
@@ -138,13 +138,15 @@ public class NotePage extends AppCompatActivity {
     }
 
     private Button renderRemoveChip(LayoutInflater inflater) {
-        Button button = (Button) inflater.inflate(R.layout.button_tag, chipGroup, false);
+        Chip button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
         button.setText("Reset");
+
+        button.setCloseIconVisible(false);
 
 
         button.setOnClickListener(v -> {
             // To get the selected name, you can cast the view back to Chip
-            Button clickedChip = (Button) v;
+            Chip clickedChip = (Chip) v;
             String selectedName = clickedChip.getText().toString();
 
             names.clear();

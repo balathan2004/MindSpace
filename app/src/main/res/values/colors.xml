@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#FF79B7FF</color>
+    <color name="header">#FF3700B3</color>
+    <color name="note_bg">#FF121212</color>
+    <color name="chip_bg">#FF101331</color>
+    <color name="tag_input_bg">#FF222325</color>
+    <color name="tag_input_text_color">#FF939498</color>
+
 </resources>
