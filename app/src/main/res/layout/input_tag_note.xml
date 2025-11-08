@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
     android:background="@color/tag_input_bg"
+
     android:hint="Add Tag"
     android:imeOptions="actionSend"
     android:inputType="text"

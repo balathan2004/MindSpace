@@ -26,7 +26,11 @@
                 android:id="@+id/tag_input_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <include layout="@layout/input_tag_note" />
+            </LinearLayout>
 
 
             <HorizontalScrollView
@@ -73,8 +77,8 @@
                         android:maxLines="5"
                         android:minLines="3"
                         android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
                         android:paddingTop="12dp"
+                        android:paddingEnd="12dp"
                         android:paddingBottom="8dp"
                         android:textColor="@color/tag_input_text_color" />
                 </androidx.cardview.widget.CardView>
@@ -94,8 +98,8 @@
                         android:lineHeight="20dp"
                         android:minLines="10"
                         android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
                         android:paddingTop="12dp"
+                        android:paddingEnd="12dp"
                         android:paddingBottom="8dp"
                         android:textColor="@color/tag_input_text_color">
 
@@ -107,7 +111,9 @@
                     android:id="@+id/submitNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Submit">
+                    android:layout_marginVertical="24dp"
+                    android:text="Submit"
+                    android:textColor="@color/white">
 
                 </Button>
 

@@ -25,8 +25,8 @@ public class NotePage extends AppCompatActivity {
 
     ChipGroup chipGroup;
 
-    LinearLayout tag_input_container;
-
+    EditText tag_input;
+    Chip remove_button;
     private final List<String> initNames = Arrays.asList("Cowsika", "Siri", "Harini", "Suvetha");
     private List<String> names = new ArrayList<String>();
 
@@ -35,7 +35,8 @@ public class NotePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
         chipGroup = findViewById(R.id.tag_chip_group);
-        tag_input_container = findViewById(R.id.tag_input_container);
+        tag_input = findViewById(R.id.add_tag);
+
 
         TextView header = findViewById(R.id.headerTitle);
 
@@ -47,7 +48,29 @@ public class NotePage extends AppCompatActivity {
         EditText title = findViewById(R.id.note_title);
         EditText note = findViewById(R.id.note_text);
         Button submitButton = findViewById(R.id.submitNote);
-        addTagInput();
+
+
+        tag_input.setOnEditorActionListener((v, actionId, event) ->
+
+        {
+
+            if (EditorInfo.IME_ACTION_SEND == actionId) {
+
+                String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
+
+                if (tag_name != null) {
+                    Log.i("Note", tag_name);
+                    names.add(tag_name);
+                    renderNameChips();
+                    tag_input.setText("");
+                }
+
+                return true;
+            }
+            tag_input.requestFocus();
+            return false;
+
+        });
 
 
         submitButton.setOnClickListener(e -> {
@@ -67,34 +90,6 @@ public class NotePage extends AppCompatActivity {
     }
 
 
-    private void addTagInput() {
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-        EditText input = (EditText) inflater.inflate(R.layout.input_tag_note, tag_input_container, false);
-
-        tag_input_container.addView(input);
-        input.setOnEditorActionListener((v, actionId, event) -> {
-
-            if (EditorInfo.IME_ACTION_SEND == actionId) {
-
-                String tag_name = new InputValidator(input).setMinLength(3).validate();
-
-                if (tag_name != null) {
-                    Log.i("Note", tag_name);
-                    names.add(tag_name);
-                    renderNameChips();
-                    input.setText("");
-                }
-
-                return true;
-            }
-            return false;
-        });
-
-
-        input.requestFocus();
-    }
-
     private void renderNameChips() {
         chipGroup.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -109,9 +104,6 @@ public class NotePage extends AppCompatActivity {
         if (!names.isEmpty()) {
             chipGroup.addView(renderRemoveChip(inflater));
         }
-        // If the left side is TRUE, the right side is executed.
-
-
     }
 
 
@@ -129,6 +121,9 @@ public class NotePage extends AppCompatActivity {
 
             parent.removeView(button);
             names.remove(selectedName);
+            if (names.isEmpty()) {
+                parent.removeView(remove_button);
+            }
 
 
             // You can add your actual filtering logic here!
@@ -138,13 +133,13 @@ public class NotePage extends AppCompatActivity {
     }
 
     private Button renderRemoveChip(LayoutInflater inflater) {
-        Chip button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
-        button.setText("Reset");
+        remove_button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
+        remove_button.setText("Reset");
 
-        button.setCloseIconVisible(false);
+        remove_button.setCloseIconVisible(false);
 
 
-        button.setOnClickListener(v -> {
+        remove_button.setOnClickListener(v -> {
             // To get the selected name, you can cast the view back to Chip
             Chip clickedChip = (Chip) v;
             String selectedName = clickedChip.getText().toString();
@@ -153,12 +148,12 @@ public class NotePage extends AppCompatActivity {
 
 
             this.renderNameChips();
-            chipGroup.removeView(button);
+            chipGroup.removeView(remove_button);
 
             // You can add your actual filtering logic here!
             Toast.makeText(NotePage.this, "Reset to default", Toast.LENGTH_SHORT).show();
         });
-        return button;
+        return remove_button;
     }
 
 }
