@@ -1,8 +1,12 @@
 package com.example.mindspace;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -12,10 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +32,7 @@ public class NotePage extends AppCompatActivity {
     ChipGroup chipGroup;
 
     EditText tag_input;
+    TextInputLayout tag_input_container;
     Chip remove_button;
     private final List<String> initNames = Arrays.asList("Cowsika", "Siri", "Harini", "Suvetha");
     private List<String> names = new ArrayList<String>();
@@ -36,18 +43,50 @@ public class NotePage extends AppCompatActivity {
         setContentView(R.layout.notes_page);
         chipGroup = findViewById(R.id.tag_chip_group);
         tag_input = findViewById(R.id.add_tag);
+        tag_input_container = findViewById(R.id.add_tag_container);
+        Drawable add_icon = ContextCompat.getDrawable(this, R.drawable.ic_add);
 
 
         TextView header = findViewById(R.id.headerTitle);
 
         header.setText("Notes");
-
-        renderNameChips();
-
+//        renderNameChips();
 
         EditText title = findViewById(R.id.note_title);
         EditText note = findViewById(R.id.note_text);
         Button submitButton = findViewById(R.id.submitNote);
+
+        tag_input_container.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+        tag_input_container.setEndIconDrawable(add_icon);
+        tag_input_container.setEndIconVisible(false);
+
+        tag_input_container.setEndIconOnClickListener(v -> {
+            addTag();
+        });
+
+
+        tag_input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String currentValue = s.toString();
+                if (currentValue.length() > 3) {
+                    Log.i("note", "length accepted");
+                    tag_input_container.setEndIconVisible(true);
+                } else {
+                    tag_input_container.setEndIconVisible(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         tag_input.setOnEditorActionListener((v, actionId, event) ->
@@ -56,14 +95,7 @@ public class NotePage extends AppCompatActivity {
 
             if (EditorInfo.IME_ACTION_SEND == actionId) {
 
-                String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
-
-                if (tag_name != null) {
-                    Log.i("Note", tag_name);
-                    names.add(tag_name);
-                    renderNameChips();
-                    tag_input.setText("");
-                }
+                addTag();
 
                 return true;
             }
@@ -154,6 +186,17 @@ public class NotePage extends AppCompatActivity {
             Toast.makeText(NotePage.this, "Reset to default", Toast.LENGTH_SHORT).show();
         });
         return remove_button;
+    }
+
+    private void addTag() {
+        String tag_name = new InputValidator(tag_input).validate();
+
+        if (tag_name != null) {
+            Log.i("Note", tag_name);
+            names.add(tag_name);
+            renderNameChips();
+            tag_input.setText("");
+        }
     }
 
 }

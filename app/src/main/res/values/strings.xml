@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MindSpace</string>
+    <string name="placeholder_notes_tag">Add Tags</string>
+    <string name="placeholder_thought_name">Enter Thought Name</string>
+    <string name="placeholder_thought_text">Type your thoughts</string>
+    <string name="submit">Submit</string>
+    <string name="thought_label">Create thought</string>
+
+
 </resources>
