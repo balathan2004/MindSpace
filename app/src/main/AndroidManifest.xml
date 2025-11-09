@@ -21,6 +21,9 @@
         <activity
             android:name=".NotePage"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Home"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".Register"

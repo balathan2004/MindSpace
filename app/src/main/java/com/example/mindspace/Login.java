@@ -21,21 +21,23 @@ public class Login extends AppCompatActivity {
         Button btn = findViewById(R.id.submit);
         EditText email = findViewById(R.id.email);
         EditText password = findViewById(R.id.password);
-        TextView navigateText=findViewById(R.id.navigateText);
+        TextView navigateText = findViewById(R.id.navigateText);
 
 
-        navigateText.setOnClickListener(e->{
-            Intent intent=new Intent(Login.this,Register.class);
+        navigateText.setOnClickListener(e -> {
+            Intent intent = new Intent(Login.this, Register.class);
             startActivity(intent);
         });
 
         btn.setOnClickListener(e -> {
-            String emailValue = new InputValidator(email).validate();
-            String passwordValue = new InputValidator(password).validate();
+            String emailValue = new InputValidator(email).setMinLength(6).validate();
+            String passwordValue = new InputValidator(password).setMinLength(6).validate();
 
             if (emailValue != null && passwordValue != null) {
                 Log.i("Login", "Email: " + emailValue);
                 Log.i("Login", "Password: " + passwordValue);
+                Intent NotePage = new Intent(Login.this, NotePage.class);
+                startActivity(NotePage);
                 // proceed with login
             } else {
                 Log.i("Login", "Validation failed");

@@ -70,19 +70,19 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintEnabled="false"
             android:layout_marginVertical="16dp"
-            >
+            app:hintEnabled="false">
 
             <EditText
-
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:autofillHints="name"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
                 android:hint="Enter Email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:maxLength="32" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -90,18 +90,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
+            app:endIconDrawable="@drawable/password_toggle"
+            app:endIconMode="password_toggle"
             app:hintEnabled="false">
-
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="24dp"
                 android:autofillHints="password"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
                 android:hint="Enter Password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="12" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -127,7 +130,8 @@
                 android:textAlignment="center" />
 
 
-            <TextView android:id="@+id/navigateText"
+            <TextView
+                android:id="@+id/navigateText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Account here"
