@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:autofillHints="name"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_@."
                 android:hint="Enter Email"
                 android:inputType="textEmailAddress"
                 android:maxLength="32" />
@@ -101,7 +101,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="24dp"
                 android:autofillHints="password"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_@."
                 android:hint="Enter Password"
                 android:inputType="textPassword"
                 android:maxLength="12" />

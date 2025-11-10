@@ -41,6 +41,18 @@ public class NotePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
+
+        Note ReceivedNote = (Note) getIntent().getSerializableExtra("Note");
+
+        EditText title = findViewById(R.id.note_title);
+        EditText desc = findViewById(R.id.note_text);
+
+
+        if (ReceivedNote != null) {
+            title.setText(ReceivedNote.getTitle());
+            desc.setText(ReceivedNote.getDesc());
+        }
+
         chipGroup = findViewById(R.id.tag_chip_group);
         tag_input = findViewById(R.id.add_tag);
         tag_input_container = findViewById(R.id.add_tag_container);
@@ -52,8 +64,7 @@ public class NotePage extends AppCompatActivity {
         header.setText("Notes");
 //        renderNameChips();
 
-        EditText title = findViewById(R.id.note_title);
-        EditText note = findViewById(R.id.note_text);
+
         Button submitButton = findViewById(R.id.submitNote);
 
         tag_input_container.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
@@ -107,7 +118,7 @@ public class NotePage extends AppCompatActivity {
 
         submitButton.setOnClickListener(e -> {
             String note_title = new InputValidator(title).setMinLength(20).validate();
-            String note_text = new InputValidator(note).setMinLength(20).validate();
+            String note_text = new InputValidator(desc).setMinLength(20).validate();
 
             if (note_title == null || note_text == null) {
                 Log.i("Note", "Value is empty");

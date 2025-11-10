@@ -36,8 +36,8 @@ public class Login extends AppCompatActivity {
             if (emailValue != null && passwordValue != null) {
                 Log.i("Login", "Email: " + emailValue);
                 Log.i("Login", "Password: " + passwordValue);
-                Intent NotePage = new Intent(Login.this, NotePage.class);
-                startActivity(NotePage);
+                Intent Home = new Intent(Login.this, Home.class);
+                startActivity(Home);
                 // proceed with login
             } else {
                 Log.i("Login", "Validation failed");
