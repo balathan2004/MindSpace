@@ -51,6 +51,10 @@ public class NotePage extends AppCompatActivity {
         if (ReceivedNote != null) {
             title.setText(ReceivedNote.getTitle());
             desc.setText(ReceivedNote.getDesc());
+            List<String> tagsValue = Arrays.asList(ReceivedNote.getTags());
+
+            names.addAll(tagsValue);
+
         }
 
         chipGroup = findViewById(R.id.tag_chip_group);
@@ -62,6 +66,7 @@ public class NotePage extends AppCompatActivity {
         TextView header = findViewById(R.id.headerTitle);
 
         header.setText("Notes");
+        renderNameChips();
 //        renderNameChips();
 
 

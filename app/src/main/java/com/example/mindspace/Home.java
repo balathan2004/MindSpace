@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import com.example.mindspace.databinding.SingleNoteCardBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
@@ -36,11 +37,11 @@ public class Home extends AppCompatActivity {
 
         noteArray.add(new Note("GOAL! Stunning Free Kick!",
                 "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!",
-                "12:35"));
+                "12:35").setTags(Arrays.asList("messi", "ronaldo").toArray(new String[0])));
 
         noteArray.add(new Note("Red Card Issued!",
                 "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red.",
-                "34:10"));
+                "34:10").setTags(Arrays.asList("messi", "ronaldo").toArray(new String[0])));
 
         header = findViewById(R.id.header);
         headerTitle = findViewById(R.id.headerTitle);

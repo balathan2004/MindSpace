@@ -1,26 +1,33 @@
-<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/add_tag_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:boxBackgroundMode="none"
-    app:hintEnabled="false"
-    >
+    app:cardCornerRadius="8dp">
 
-    <EditText
-        android:id="@+id/add_tag"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/add_tag_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:autofillHints="Tag"
-        android:background="@color/tag_input_bg"
-        android:hint="@string/placeholder_notes_tag"
-        android:imeOptions="actionSend"
-        android:inputType="text"
-        android:maxLength="50"
-        android:maxLines="1"
-        android:paddingVertical="10dp"
-        android:saveEnabled="false"
-        android:textColor="@color/tag_input_text_color" />
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false">
 
-</com.google.android.material.textfield.TextInputLayout>
 
+        <EditText
+            android:id="@+id/add_tag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:height="20dp"
+            android:autofillHints="Tag"
+            android:background="@color/tag_input_bg"
+            android:hint="@string/placeholder_notes_tag"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:paddingVertical="10dp"
+            android:saveEnabled="false"
+            android:textColor="@color/tag_input_text_color" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.cardview.widget.CardView>
