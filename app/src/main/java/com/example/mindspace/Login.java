@@ -3,6 +3,7 @@ package com.example.mindspace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -37,8 +38,15 @@ public class Login extends AppCompatActivity {
                 Log.i("Login", "Email: " + emailValue);
                 Log.i("Login", "Password: " + passwordValue);
                 Intent Home = new Intent(Login.this, Home.class);
-                startActivity(Home);
-                // proceed with login
+                SharedPreferences prefs = getSharedPreferences("userCred", MODE_PRIVATE);
+                prefs.edit().putBoolean("isLoggedIn", true).apply();
+
+                Intent intent = new Intent(Login.this, Home.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(intent);
+                finish();
+
             } else {
                 Log.i("Login", "Validation failed");
             }
