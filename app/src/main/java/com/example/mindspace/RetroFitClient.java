@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroFitClient {
 
-//    private static final String baseUrl = "http://localhost:3000/";
-    private static final String baseUrl = "https://jsonplaceholder.typicode.com/";
+    private static final String baseUrl = "https://e495b039c205.ngrok-free.app/api/";
     private static Retrofit retrofit;
 
     public static Retrofit GetRetroFit() {

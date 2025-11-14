@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,34 +70,11 @@ public class Home extends AppCompatActivity {
 
 
 
-fetchTodos();
 
     }
 
-    private void fetchTodos(){
-
-        ApiService apiService=RetroFitClient.GetRetroFit().create(ApiService.class);
-
-        Call<ToDo> todo=apiService.getTodoById(5);
 
 
-        todo.enqueue(new Callback<ToDo>() {
-            @Override
-            public void onResponse(Call<ToDo> call, Response<ToDo> response) {
-                if(response.isSuccessful() && response.body()!=null){
-                    ToDo data=response.body();
-                    Log.i("todo",data.getTitle());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ToDo> call, Throwable t) {
-                Log.i("todo","response failed");
-            }
-        });
-
-
-    }
     public void addNotes(Note note) {
         inflater = LayoutInflater.from(this);
         SingleNoteCardBinding card = SingleNoteCardBinding.inflate(inflater, note_list, false);
