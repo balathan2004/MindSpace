@@ -34,33 +34,38 @@ public class NotePage extends AppCompatActivity {
 
     EditText tag_input;
     TextInputLayout tag_input_container;
+
+    Button submit_button;
     Chip remove_button;
-    private final List<String> initNames = Arrays.asList("Cowsika", "Siri", "Harini", "Suvetha");
-    private List<String> names = new ArrayList<String>();
+    Note NoteData = null;
+    private List<String> tags = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
 
-        Note ReceivedNote = (Note) getIntent().getSerializableExtra("Note");
+
+        NoteData = (Note) getIntent().getSerializableExtra("Note");
 
         EditText title = findViewById(R.id.note_title);
         EditText desc = findViewById(R.id.note_text);
-        ImageView backarrow=findViewById(R.id.back_arrow);
+        ImageView backarrow = findViewById(R.id.back_arrow);
 
-        backarrow.setOnClickListener(e->{
+
+
+        backarrow.setOnClickListener(e -> {
             finish();
         });
 
 
-        if (ReceivedNote != null) {
-            title.setText(ReceivedNote.getTitle());
-            desc.setText(ReceivedNote.getDesc());
-            List<String> tagsValue = Arrays.asList(ReceivedNote.getTags());
-
-            names.addAll(tagsValue);
-
+        if (NoteData != null) {
+            title.setText(NoteData.getTitle());
+            desc.setText(NoteData.getDesc());
+            List<String> tagsValue = Arrays.asList(NoteData.getTags());
+            tags.addAll(tagsValue);
+        } else {
+            NoteData = new Note("", "", "");
         }
 
         chipGroup = findViewById(R.id.tag_chip_group);
@@ -73,10 +78,10 @@ public class NotePage extends AppCompatActivity {
 
         header.setText("Notes");
         renderNameChips();
-//        renderNameChips();
 
 
-        Button submitButton = findViewById(R.id.submitNote);
+        submit_button = findViewById(R.id.submit_button);
+
 
         tag_input_container.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
         tag_input_container.setEndIconDrawable(add_icon);
@@ -111,14 +116,9 @@ public class NotePage extends AppCompatActivity {
         });
 
 
-        tag_input.setOnEditorActionListener((v, actionId, event) ->
-
-        {
-
+        tag_input.setOnEditorActionListener((v, actionId, event) -> {
             if (EditorInfo.IME_ACTION_SEND == actionId) {
-
                 addTag();
-
                 return true;
             }
             tag_input.requestFocus();
@@ -127,17 +127,21 @@ public class NotePage extends AppCompatActivity {
         });
 
 
-        submitButton.setOnClickListener(e -> {
-            String note_title = new InputValidator(title).setMinLength(20).validate();
-            String note_text = new InputValidator(desc).setMinLength(20).validate();
+        submit_button.setOnClickListener(e -> {
+            String note_title = new InputValidator(title).setMinLength(3).validate();
+            String note_text = new InputValidator(desc).setMinLength(6).validate();
 
             if (note_title == null || note_text == null) {
-                Log.i("Note", "Value is empty");
+                Toast.makeText(NotePage.this, "Title or Content Missing", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Log.i("Note", note_title);
-            Log.i("Note", note_text);
+            NoteData.setDesc(note_text);
+            NoteData.setTitle(note_title);
+            String[] arr = tags.toArray(new String[0]);
+            NoteData.setTags(arr);
+
+            Log.i("Note", NoteData.toString());
 
         });
 
@@ -148,14 +152,12 @@ public class NotePage extends AppCompatActivity {
         chipGroup.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (String name : names) {
-
+        for (String name : tags) {
             Chip button = (Chip) renderSingleChip(inflater, name);
-
             chipGroup.addView(button);
         }
 
-        if (!names.isEmpty()) {
+        if (!tags.isEmpty()) {
             chipGroup.addView(renderRemoveChip(inflater));
         }
     }
@@ -174,14 +176,10 @@ public class NotePage extends AppCompatActivity {
             ViewGroup parent = (ViewGroup) button.getParent();
 
             parent.removeView(button);
-            names.remove(selectedName);
-            if (names.isEmpty()) {
+            tags.remove(selectedName);
+            if (tags.isEmpty()) {
                 parent.removeView(remove_button);
             }
-
-
-            // You can add your actual filtering logic here!
-            Toast.makeText(NotePage.this, "Removed: " + selectedName, Toast.LENGTH_SHORT).show();
         });
         return button;
     }
@@ -194,28 +192,24 @@ public class NotePage extends AppCompatActivity {
 
 
         remove_button.setOnClickListener(v -> {
-            // To get the selected name, you can cast the view back to Chip
-            Chip clickedChip = (Chip) v;
-            String selectedName = clickedChip.getText().toString();
 
-            names.clear();
-
-
+            tags.clear();
             this.renderNameChips();
             chipGroup.removeView(remove_button);
-
             // You can add your actual filtering logic here!
-            Toast.makeText(NotePage.this, "Reset to default", Toast.LENGTH_SHORT).show();
         });
         return remove_button;
     }
 
     private void addTag() {
-        String tag_name = new InputValidator(tag_input).validate();
+        String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
 
         if (tag_name != null) {
             Log.i("Note", tag_name);
-            names.add(tag_name);
+
+
+            tags.add(tag_name);
+
             renderNameChips();
             tag_input.setText("");
         }

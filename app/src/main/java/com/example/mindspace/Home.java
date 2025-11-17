@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,6 +52,8 @@ public class Home extends AppCompatActivity {
         header = findViewById(R.id.header);
         headerTitle = findViewById(R.id.headerTitle);
 
+        Button add_thought = findViewById(R.id.create_thought_btn);
+
         headerTitle.setText("Home");
         LinearLayout headerRight = findViewById(R.id.headerRight);
 
@@ -69,10 +72,14 @@ public class Home extends AppCompatActivity {
         }
 
 
+        add_thought.setOnClickListener(e -> {
+
+            Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
+            startActivity(NotePage);
+        });
 
 
     }
-
 
 
     public void addNotes(Note note) {
@@ -84,8 +91,7 @@ public class Home extends AppCompatActivity {
         card.getRoot().setOnClickListener(e -> {
             Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
             NotePage.putExtra("Note", note);
-            startActivity(NotePage)
-            ;
+            startActivity(NotePage);
         });
 
         note_list.addView(card.getRoot());

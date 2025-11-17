@@ -18,16 +18,15 @@ public class AuthStack extends AppCompatActivity {
 
         if (isLoggedIn) {
             startMainStack();
-        }else{
-            Intent intent = new Intent(AuthStack.this, Login.class);
-            startActivity(intent);
+        } else {
+            Utils.Navigate(this, Login.class, false);
+
         }
     }
 
     private void startMainStack() {
-        Intent intent = new Intent(AuthStack.this, Home.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+
+        Utils.Navigate(this, Home.class, true);
         finish();
     }
 

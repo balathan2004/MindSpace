@@ -18,9 +18,11 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class Login extends AppCompatActivity {
 
@@ -65,7 +67,9 @@ public class Login extends AppCompatActivity {
 
 
         if (this.emailValue.isEmpty() || this.passwordValue.isEmpty()) {
-            Toast.makeText(this, "Values Messing", Toast.LENGTH_SHORT);
+
+            Utils.ShowToast(this, "Values Messing");
+
 
         } else {
             ApiService apiService = RetroFitClient.GetRetroFit().create(ApiService.class);
@@ -73,7 +77,6 @@ public class Login extends AppCompatActivity {
             Log.d("LOGIN", "Success: made request var");
             Call<AuthResponseConfig> call = apiService.login(loginRequest);
 
-            Log.d("LOGIN", "Success: call set");
 
             call.enqueue(new Callback<AuthResponseConfig>() {
 
@@ -83,14 +86,16 @@ public class Login extends AppCompatActivity {
                     if (response.isSuccessful()) {
 
                         AuthResponseConfig data = response.body();
-                        Log.d("LOGIN", "Success: " + data.getUserProfile().getDisplay_name());
 
+                        Utils.ShowToast(Login.this, "Login Successful");
                         NavigatetMain(data.getUserProfile());
 
                     } else {
-                        Log.d("LOGIN", "Success: else block");
+
                         try {
-                            Log.e("LOGIN", "RAW ERROR BODY: " + response.errorBody().string());
+                            String errorJson = response.errorBody().string();
+                            AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
+                            Utils.ShowToast(Login.this, err.getMessage());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -118,10 +123,9 @@ public class Login extends AppCompatActivity {
         prefs.edit().putBoolean("isLoggedIn", true).apply();
         prefs.edit().putString("user", userJson);
 
-        Intent intent = new Intent(Login.this, Home.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        startActivity(intent);
+        Utils.Navigate(this, Home.class, true);
+
         finish();
     }
 

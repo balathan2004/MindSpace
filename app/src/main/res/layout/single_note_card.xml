@@ -4,7 +4,6 @@
 
 
     <data>
-
         <variable
             name="noteItem"
             type="com.example.mindspace.Note" />
