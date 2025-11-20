@@ -3,7 +3,9 @@ package com.example.mindspace;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Note implements Serializable {
 
@@ -13,14 +15,22 @@ public class Note implements Serializable {
     private String desc;
     private String time;
 
-    private String[] tags;
+    private String createdAt;
 
-    public Note(String title, String desc, String time) {
+    private String lastModified;
+
+    private List<String> readsAt;
+
+    private List<String> tags;
+
+    public Note(String title, String desc) {
         this._id = Utils.generateShortUUID();
         this.title = title;
         this.desc = desc;
-        this.time = time;
-        this.tags = new String[0];
+        this.createdAt = Utils.getISOString();
+        this.lastModified = Utils.getISOString();
+        this.readsAt = Arrays.asList(Utils.getISOString());
+        this.tags = new ArrayList<String>();
     }
 
 
@@ -48,14 +58,15 @@ public class Note implements Serializable {
         this.desc = desc;
     }
 
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public Note setTags(String[] tags) {
+    public Note setTags(List<String> tags) {
         this.tags = tags;
         return this;
     }
+
 
     @NonNull
     @Override
@@ -65,7 +76,7 @@ public class Note implements Serializable {
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
                 ", time='" + time + '\'' +
-                ", tags=" + Arrays.toString(tags) +
+                ", tags=" + tags.toString() +
                 '}';
     }
 

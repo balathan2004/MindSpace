@@ -6,9 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 public class Utils {
+
+
+    public static String getISOString() {
+
+        Instant now = Instant.now();
+
+        return now.toString();
+
+    }
 
 
     public static String generateShortUUID() {

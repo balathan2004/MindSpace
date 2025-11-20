@@ -42,12 +42,12 @@ public class Home extends AppCompatActivity {
 
 
         noteArray.add(new Note("GOAL! Stunning Free Kick!",
-                "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!",
-                "12:35").setTags(Arrays.asList("messi", "ronaldo").toArray(new String[0])));
+                "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!"
+        ).setTags(Arrays.asList("messi", "ronaldo")));
 
         noteArray.add(new Note("Red Card Issued!",
-                "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red.",
-                "34:10").setTags(Arrays.asList("messi", "ronaldo").toArray(new String[0])));
+                "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red."
+        ).setTags(Arrays.asList("messi", "ronaldo")));
 
         header = findViewById(R.id.header);
         headerTitle = findViewById(R.id.headerTitle);

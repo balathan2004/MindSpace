@@ -53,7 +53,6 @@ public class NotePage extends AppCompatActivity {
         ImageView backarrow = findViewById(R.id.back_arrow);
 
 
-
         backarrow.setOnClickListener(e -> {
             finish();
         });
@@ -62,10 +61,10 @@ public class NotePage extends AppCompatActivity {
         if (NoteData != null) {
             title.setText(NoteData.getTitle());
             desc.setText(NoteData.getDesc());
-            List<String> tagsValue = Arrays.asList(NoteData.getTags());
+            List<String> tagsValue = NoteData.getTags();
             tags.addAll(tagsValue);
         } else {
-            NoteData = new Note("", "", "");
+            NoteData = new Note("", "");
         }
 
         chipGroup = findViewById(R.id.tag_chip_group);
@@ -102,7 +101,7 @@ public class NotePage extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String currentValue = s.toString();
                 if (currentValue.length() > 3) {
-                    Log.i("note", "length accepted");
+                    Log.i("console", "length accepted");
                     tag_input_container.setEndIconVisible(true);
                 } else {
                     tag_input_container.setEndIconVisible(false);
@@ -138,10 +137,10 @@ public class NotePage extends AppCompatActivity {
 
             NoteData.setDesc(note_text);
             NoteData.setTitle(note_title);
-            String[] arr = tags.toArray(new String[0]);
-            NoteData.setTags(arr);
 
-            Log.i("Note", NoteData.toString());
+            NoteData.setTags(tags);
+
+            Log.i("console", NoteData.toString());
 
         });
 
@@ -205,7 +204,7 @@ public class NotePage extends AppCompatActivity {
         String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
 
         if (tag_name != null) {
-            Log.i("Note", tag_name);
+            Log.i("console", tag_name);
 
 
             tags.add(tag_name);
