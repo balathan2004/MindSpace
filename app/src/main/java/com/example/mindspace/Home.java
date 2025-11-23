@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.mindspace.databinding.SingleNoteCardBinding;
+import com.example.mindspace.ui_components.LoadingButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,9 +61,21 @@ public class Home extends AppCompatActivity {
         header.removeView(headerRight);
 
 
+        LoadingButton loadingButton=findViewById(R.id.loader_button);
+
+        loadingButton.onClick(e->{
+            loadingButton.hideLoading();
+            loadingButton.setText("Load");
+        });
+
+//        loadingButton.hideLoading();
+
+
+
         note_list = findViewById(R.id.note_list);
 
         inflater = LayoutInflater.from(this);
+
 
         int i;
 
