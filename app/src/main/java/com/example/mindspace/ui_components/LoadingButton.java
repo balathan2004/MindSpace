@@ -12,12 +12,16 @@ import androidx.cardview.widget.CardView;
 
 import com.example.mindspace.R;
 
-public class LoadingButton extends LinearLayout {
+public class LoadingButton extends CardView {
 
 
-    private LinearLayout button;
+
     private ProgressBar loader;
     private TextView loading_label;
+
+    private String InitLabel;
+
+    private String LoadingLabel;
 
 
     public LoadingButton(Context context, @Nullable AttributeSet attrs) {
@@ -27,31 +31,41 @@ public class LoadingButton extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.loading_button, this, true);
-        button = findViewById(R.id.loader_button);
+
         loader = findViewById(R.id.loader);
         loading_label = findViewById(R.id.loader_label);
+        loader.setVisibility(GONE);
     }
 
 
-    public void setText(String text) {
-        loading_label.setText(text);
+    public void setText(String InitText, String LoadingText) {
+        this.InitLabel = InitText;
+        this.LoadingLabel = LoadingText;
+        if (loader.getVisibility() == GONE) {
+            loading_label.setText(InitLabel);
+        }
     }
 
     public void onClick(OnClickListener listener) {
-        button.setOnClickListener(listener);
+        this.setOnClickListener(listener);
     }
 
+
+
     public void showLoading() {
-        button.setEnabled(false);
+        this.setEnabled(false);
         loader.setClickable(false);
-        loading_label.setVisibility(GONE);
+        loading_label.setText(LoadingLabel);
+//        loading_label.setVisibility(GONE);
         loader.setVisibility(VISIBLE);
     }
 
     public void hideLoading() {
-        button.setEnabled(true);
+        this.setEnabled(true);
         loading_label.setVisibility(VISIBLE);
+        loading_label.setText(InitLabel);
         loader.setVisibility(GONE);
+
     }
 
 

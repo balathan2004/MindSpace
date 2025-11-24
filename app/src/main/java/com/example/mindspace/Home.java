@@ -65,7 +65,7 @@ public class Home extends AppCompatActivity {
 
         loadingButton.onClick(e->{
             loadingButton.hideLoading();
-            loadingButton.setText("Load");
+            loadingButton.setText("Load","Loading");
         });
 
 //        loadingButton.hideLoading();

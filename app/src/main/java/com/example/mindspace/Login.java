@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.mindspace.api_request.LoginRequest;
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.UserProfile;
+import com.example.mindspace.ui_components.LoadingButton;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class Login extends AppCompatActivity {
 
     String emailValue = null;
     String passwordValue = null;
+    LoadingButton submit_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +37,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        Button btn = findViewById(R.id.submit);
+//        Button btn = findViewById(R.id.submit);
         EditText email = findViewById(R.id.email);
         EditText password = findViewById(R.id.password);
         TextView navigateText = findViewById(R.id.navigateText);
+
+        submit_button = findViewById(R.id.submit_button);
+        submit_button.setText("Login","Logging in");
+
 
 
         navigateText.setOnClickListener(e -> {
@@ -46,7 +52,9 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btn.setOnClickListener(e -> {
+        submit_button.setOnClickListener(e -> {
+            submit_button.showLoading();
+
             emailValue = new InputValidator(email).setMinLength(6).validate();
             passwordValue = new InputValidator(password).setMinLength(6).validate();
 
@@ -58,6 +66,7 @@ public class Login extends AppCompatActivity {
 
             } else {
                 Log.i("Login", "Validation failed");
+                submit_button.hideLoading();
             }
         });
     }
@@ -69,6 +78,7 @@ public class Login extends AppCompatActivity {
         if (this.emailValue.isEmpty() || this.passwordValue.isEmpty()) {
 
             Utils.ShowToast(this, "Values Messing");
+            submit_button.hideLoading();
 
 
         } else {
@@ -88,7 +98,8 @@ public class Login extends AppCompatActivity {
                         AuthResponseConfig data = response.body();
 
                         Utils.ShowToast(Login.this, "Login Successful");
-                        NavigatetMain(data.getUserProfile());
+                        NavigateToMain(data.getUserProfile());
+                        submit_button.hideLoading();
 
                     } else {
 
@@ -99,6 +110,7 @@ public class Login extends AppCompatActivity {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
+                        submit_button.hideLoading();
                     }
                 }
 
@@ -113,7 +125,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void NavigatetMain(UserProfile userProfile) {
+    private void NavigateToMain(UserProfile userProfile) {
         Intent Home = new Intent(Login.this, Home.class);
 
         Gson gson = new Gson();
