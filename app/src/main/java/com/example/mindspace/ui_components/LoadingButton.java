@@ -15,7 +15,6 @@ import com.example.mindspace.R;
 public class LoadingButton extends CardView {
 
 
-
     private ProgressBar loader;
     private TextView loading_label;
 
@@ -38,7 +37,7 @@ public class LoadingButton extends CardView {
     }
 
 
-    public void setText(String InitText, String LoadingText) {
+    public void setLabels(String InitText, String LoadingText) {
         this.InitLabel = InitText;
         this.LoadingLabel = LoadingText;
         if (loader.getVisibility() == GONE) {
@@ -49,7 +48,6 @@ public class LoadingButton extends CardView {
     public void onClick(OnClickListener listener) {
         this.setOnClickListener(listener);
     }
-
 
 
     public void showLoading() {

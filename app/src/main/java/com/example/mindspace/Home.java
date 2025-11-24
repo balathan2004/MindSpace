@@ -61,17 +61,6 @@ public class Home extends AppCompatActivity {
         header.removeView(headerRight);
 
 
-        LoadingButton loadingButton=findViewById(R.id.loader_button);
-
-        loadingButton.onClick(e->{
-            loadingButton.hideLoading();
-            loadingButton.setText("Load","Loading");
-        });
-
-//        loadingButton.hideLoading();
-
-
-
         note_list = findViewById(R.id.note_list);
 
         inflater = LayoutInflater.from(this);

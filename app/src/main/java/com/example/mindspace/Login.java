@@ -43,7 +43,7 @@ public class Login extends AppCompatActivity {
         TextView navigateText = findViewById(R.id.navigateText);
 
         submit_button = findViewById(R.id.submit_button);
-        submit_button.setText("Login","Logging in");
+        submit_button.setLabels("Login","Logging in");
 
 
 

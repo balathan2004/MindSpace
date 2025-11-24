@@ -19,14 +19,23 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.mindspace.api_request.CreateThoughtRequest;
+import com.example.mindspace.api_response.AuthResponseConfig;
+import com.example.mindspace.api_response.ResponseConfig;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotePage extends AppCompatActivity {
 
@@ -140,6 +149,8 @@ public class NotePage extends AppCompatActivity {
 
             NoteData.setTags(tags);
 
+            CreateNote();
+
             Log.i("console", NoteData.toString());
 
         });
@@ -213,5 +224,41 @@ public class NotePage extends AppCompatActivity {
             tag_input.setText("");
         }
     }
+
+    private void CreateNote(){
+
+        Utils.ShowToast(NotePage.this,"Called CreateNote");
+
+        ApiService apiService=RetroFitClient.GetRetroFit().create(ApiService.class);
+        CreateThoughtRequest request=new CreateThoughtRequest(NoteData);
+        Call<ResponseConfig> call = apiService.createThought(request);
+
+        call.enqueue(new Callback<ResponseConfig>() {
+            @Override
+            public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
+                if(response.isSuccessful()){
+                    ResponseConfig data=response.body();
+                    Utils.ShowToast(NotePage.this,data.getMessage().toString());
+                }else{
+                    try {
+                        String errorJson = response.errorBody().string();
+                        AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
+                        Utils.ShowToast(NotePage.this, err.getMessage());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseConfig> call, Throwable t) {
+                Log.e("console", "Error: " + t.getMessage());
+            }
+        });
+
+
+    }
+
+
 
 }
