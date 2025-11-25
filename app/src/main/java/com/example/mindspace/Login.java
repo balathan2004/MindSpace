@@ -131,9 +131,15 @@ public class Login extends AppCompatActivity {
         Gson gson = new Gson();
         String userJson = gson.toJson(userProfile);
 
+        AuthState state=(AuthState) getApplication();
+
+        state.setLoggedIn(true,userProfile);
+
         SharedPreferences prefs = getSharedPreferences("userCred", MODE_PRIVATE);
         prefs.edit().putBoolean("isLoggedIn", true).apply();
-        prefs.edit().putString("user", userJson);
+        prefs.edit().putString("user", userJson).apply();
+
+        Log.e("console", "Error: " + userJson);
 
 
         Utils.Navigate(this, Home.class, true);

@@ -3,11 +3,11 @@ package com.example.mindspace.api_response;
 public class UserProfile {
 
 
-    private String display_name;
-    private String email;
-    private String profile_url;
-    private String uid;
-    private String createdAt;
+    public String display_name;
+    public String email;
+    public String profile_url;
+    public String uid;
+    public String createdAt;
 
 
     public UserProfile() {
