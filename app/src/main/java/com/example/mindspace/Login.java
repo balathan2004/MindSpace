@@ -43,8 +43,7 @@ public class Login extends AppCompatActivity {
         TextView navigateText = findViewById(R.id.navigateText);
 
         submit_button = findViewById(R.id.submit_button);
-        submit_button.setLabels("Login","Logging in");
-
+        submit_button.setLabels("Login", "Logging in");
 
 
         navigateText.setOnClickListener(e -> {
@@ -84,7 +83,7 @@ public class Login extends AppCompatActivity {
         } else {
             ApiService apiService = RetroFitClient.GetRetroFit().create(ApiService.class);
             LoginRequest loginRequest = new LoginRequest(emailValue, passwordValue);
-            Log.d("LOGIN", "Success: made request var");
+
             Call<AuthResponseConfig> call = apiService.login(loginRequest);
 
 
@@ -97,8 +96,10 @@ public class Login extends AppCompatActivity {
 
                         AuthResponseConfig data = response.body();
 
-                        Utils.ShowToast(Login.this, "Login Successful");
-                        NavigateToMain(data.getUserProfile());
+                        Log.i("console", "response " + data.getAccessToken());
+
+                        Utils.ShowToast(Login.this, "Login Successful" + data.getAccessToken());
+                        NavigateToMain(data);
                         submit_button.hideLoading();
 
                     } else {
@@ -116,7 +117,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<AuthResponseConfig> call, Throwable t) {
-                    Log.e("LOGIN", "Error: " + t.getMessage());
+                    Log.e("console", "ON Failure: " + t.getMessage());
                 }
             });
 
@@ -125,21 +126,19 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void NavigateToMain(UserProfile userProfile) {
+    private void NavigateToMain(AuthResponseConfig response) {
         Intent Home = new Intent(Login.this, Home.class);
 
         Gson gson = new Gson();
-        String userJson = gson.toJson(userProfile);
 
-        AuthState state=(AuthState) getApplication();
 
-        state.setLoggedIn(true,userProfile);
+        AuthState state = (AuthState) getApplication();
+
+        state.setLoggedIn(response);
 
         SharedPreferences prefs = getSharedPreferences("userCred", MODE_PRIVATE);
         prefs.edit().putBoolean("isLoggedIn", true).apply();
-        prefs.edit().putString("user", userJson).apply();
-
-        Log.e("console", "Error: " + userJson);
+        prefs.edit().putString("refreshToken", response.getRefreshToken()).apply();
 
 
         Utils.Navigate(this, Home.class, true);

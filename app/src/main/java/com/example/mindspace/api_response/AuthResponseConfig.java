@@ -8,9 +8,27 @@ public class AuthResponseConfig extends ResponseConfig {
     @SerializedName("credentials")
     private UserProfile user;
 
-    public AuthResponseConfig(String message, UserProfile user) {
+    @SerializedName("accessToken")
+    private String accessToken;
+
+
+    @SerializedName("refreshToken")
+    private String refreshToken;
+
+
+    public AuthResponseConfig(String message, UserProfile user, String accessToken, String refreshToken) {
         super(message);
         this.user = user;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
 

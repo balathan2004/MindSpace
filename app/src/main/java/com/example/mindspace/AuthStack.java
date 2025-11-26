@@ -7,8 +7,17 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mindspace.api_request.RefreshTokenRequest;
+import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.UserProfile;
 import com.google.gson.Gson;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class AuthStack extends AppCompatActivity {
 
@@ -21,33 +30,58 @@ public class AuthStack extends AppCompatActivity {
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
 
 
-        String userCred = prefs.getString("user", null);
-
-        Log.e("console", "Raw userCred from prefs: " + userCred);
-
-
-        UserProfile userProfile = null;
-
-        if (userCred == null) {
-            Log.e("console", "cred is null");
-        } else {
-            Log.e("console", userCred);
-            Gson gson = new Gson();
-            userProfile = gson.fromJson(userCred, UserProfile.class);
-        }
-
+        String refreshToken = prefs.getString("refreshToken", null);
 
         AuthState state = (AuthState) getApplication();
 
-
-        if (isLoggedIn && userProfile!=null) {
-            state.setLoggedIn(isLoggedIn, userProfile);
-            startMainStack();
-
+        if (refreshToken == null) {
+            Log.e("console", "cred is null");
+            StartLogin();
         } else {
-            Utils.Navigate(this, Login.class, false);
+            Log.e("console", refreshToken);
+            ApiService apiService = RetroFitClient.GetRetroFit().create(ApiService.class);
+            RefreshTokenRequest req = new RefreshTokenRequest(refreshToken);
+
+            Call<AuthResponseConfig> call = apiService.updateRefreshToken(req);
+
+
+            call.enqueue(new Callback<AuthResponseConfig>() {
+                @Override
+                public void onResponse(Call<AuthResponseConfig> call, Response<AuthResponseConfig> response) {
+                    if (response.isSuccessful()) {
+                        AuthResponseConfig data = response.body();
+                        Log.i("console", "onResponse: "+data.getMessage());
+                        state.setLoggedIn(data);
+                        startMainStack();
+
+                    } else {
+                        try {
+                            String errorJson = response.errorBody().string();
+                            AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
+                            StartLogin();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AuthResponseConfig> call, Throwable t) {
+                    Log.e("console", "ON Failure: " + t.getMessage());
+                    StartLogin();
+                }
+            });
+
 
         }
+
+
+    }
+
+
+    private void StartLogin() {
+        Utils.Navigate(this, Login.class, false);
     }
 
     private void startMainStack() {
