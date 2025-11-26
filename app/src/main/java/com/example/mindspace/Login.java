@@ -81,7 +81,7 @@ public class Login extends AppCompatActivity {
 
 
         } else {
-            ApiService apiService = RetroFitClient.GetRetroFit().create(ApiService.class);
+            ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
             LoginRequest loginRequest = new LoginRequest(emailValue, passwordValue);
 
             Call<AuthResponseConfig> call = apiService.login(loginRequest);

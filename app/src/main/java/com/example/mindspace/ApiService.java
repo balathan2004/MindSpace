@@ -28,4 +28,9 @@ public interface ApiService {
     @POST("mindspace")
     Call<ResponseConfig> createThought(@Body CreateThoughtRequest createThought);
 
+
+    @GET("api/get_docs")
+    Call<ResponseConfig> getDocs();
+
+
 }

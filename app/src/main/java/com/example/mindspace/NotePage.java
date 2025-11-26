@@ -66,6 +66,8 @@ public class NotePage extends AppCompatActivity {
             finish();
         });
 
+        getReq();
+
 
         if (NoteData != null) {
             title.setText(NoteData.getTitle());
@@ -225,11 +227,33 @@ public class NotePage extends AppCompatActivity {
         }
     }
 
+    private void getReq(){
+        ApiService  apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
+
+        Call<ResponseConfig> call=apiService.getDocs();
+
+        call.enqueue(new Callback<ResponseConfig>() {
+            @Override
+            public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
+                if(response.isSuccessful()){
+                    ResponseConfig data =response.body();
+                    Log.i("console", "hello wolrd: "+data.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseConfig> call, Throwable t) {
+
+            }
+        });
+
+    }
+
     private void CreateNote(){
 
         Utils.ShowToast(NotePage.this,"Called CreateNote");
 
-        ApiService apiService=RetroFitClient.GetRetroFit().create(ApiService.class);
+        ApiService apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
         CreateThoughtRequest request=new CreateThoughtRequest(NoteData);
         Call<ResponseConfig> call = apiService.createThought(request);
 

@@ -39,7 +39,7 @@ public class AuthStack extends AppCompatActivity {
             StartLogin();
         } else {
             Log.e("console", refreshToken);
-            ApiService apiService = RetroFitClient.GetRetroFit().create(ApiService.class);
+            ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
             RefreshTokenRequest req = new RefreshTokenRequest(refreshToken);
 
             Call<AuthResponseConfig> call = apiService.updateRefreshToken(req);
