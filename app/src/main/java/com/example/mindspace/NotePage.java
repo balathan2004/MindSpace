@@ -65,8 +65,8 @@ public class NotePage extends AppCompatActivity {
         backarrow.setOnClickListener(e -> {
             finish();
         });
-
-        getReq();
+//
+//        getReq();
 
 
         if (NoteData != null) {
@@ -227,43 +227,43 @@ public class NotePage extends AppCompatActivity {
         }
     }
 
-    private void getReq(){
-        ApiService  apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
+//    private void getReq(){
+//        ApiService  apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
+//
+//        Call<ResponseConfig> call=apiService.getDocs();
+//
+//        call.enqueue(new Callback<ResponseConfig>() {
+//            @Override
+//            public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
+//                if(response.isSuccessful()){
+//                    ResponseConfig data =response.body();
+//                    Log.i("console", "hello wolrd: "+data.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseConfig> call, Throwable t) {
+//
+//            }
+//        });
+//
+//    }
 
-        Call<ResponseConfig> call=apiService.getDocs();
+    private void CreateNote() {
 
-        call.enqueue(new Callback<ResponseConfig>() {
-            @Override
-            public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
-                if(response.isSuccessful()){
-                    ResponseConfig data =response.body();
-                    Log.i("console", "hello wolrd: "+data.getMessage());
-                }
-            }
+        Utils.ShowToast(NotePage.this, "Called CreateNote");
 
-            @Override
-            public void onFailure(Call<ResponseConfig> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-    private void CreateNote(){
-
-        Utils.ShowToast(NotePage.this,"Called CreateNote");
-
-        ApiService apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
-        CreateThoughtRequest request=new CreateThoughtRequest(NoteData);
+        ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
+        CreateThoughtRequest request = new CreateThoughtRequest(NoteData);
         Call<ResponseConfig> call = apiService.createThought(request);
 
         call.enqueue(new Callback<ResponseConfig>() {
             @Override
             public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
-                if(response.isSuccessful()){
-                    ResponseConfig data=response.body();
-                    Utils.ShowToast(NotePage.this,data.getMessage().toString());
-                }else{
+                if (response.isSuccessful()) {
+                    ResponseConfig data = response.body();
+                    Utils.ShowToast(NotePage.this, data.getMessage().toString());
+                } else {
                     try {
                         String errorJson = response.errorBody().string();
                         AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
@@ -282,7 +282,6 @@ public class NotePage extends AppCompatActivity {
 
 
     }
-
 
 
 }

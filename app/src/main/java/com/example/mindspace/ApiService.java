@@ -25,7 +25,7 @@ public interface ApiService {
     @POST("auth/refreshToken")
     Call<AuthResponseConfig>updateRefreshToken(@Body RefreshTokenRequest refreshTokenRequest);
 
-    @POST("mindspace")
+    @POST("mindspace/create_thought")
     Call<ResponseConfig> createThought(@Body CreateThoughtRequest createThought);
 
 

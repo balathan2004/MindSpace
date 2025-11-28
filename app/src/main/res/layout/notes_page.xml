@@ -1,43 +1,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/root"
-    >
+
+    android:orientation="vertical">
 
     <include layout="@layout/header_layout" />
 
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/note_bg"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
-
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@color/note_bg"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="24dp">
 
 
-            <LinearLayout
-                android:id="@+id/tag_input_container"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="8dp">
 
-                <include layout="@layout/input_tag_note" />
-            </LinearLayout>
+                <EditText
+                    android:id="@+id/note_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/tag_input_bg"
+                    android:gravity="top"
+                    android:hint="@string/placeholder_thought_name"
+                    android:lineHeight="20dp"
+                    android:maxLength="50"
+                    android:maxLines="5"
+                    android:minLines="2"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/tag_input_text_color" />
+            </androidx.cardview.widget.CardView>
+
+
+            <include layout="@layout/input_tag_note" />
 
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
                 android:scrollbars="none">
 
@@ -49,84 +65,58 @@
 
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp">
+
+                        <EditText
+                            android:id="@+id/note_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/tag_input_bg"
+                            android:gravity="top"
+                            android:hint="@string/placeholder_thought_text"
+                            android:lineHeight="20dp"
+                            android:minLines="10"
+                            android:paddingStart="12dp"
+                            android:paddingTop="12dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="8dp"
+                            android:textColor="@color/tag_input_text_color">
+
+                        </EditText>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <Button
+                        android:id="@+id/submit_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="24dp"
+                        android:backgroundTint="@color/primary_button_bg"
+                        android:minHeight="48dp"
+                        android:paddingVertical="8dp"
+                        android:text="Submit"
+                        android:textColor="@color/white">
+
+                    </Button>
+
+                </LinearLayout>
+
+
         </LinearLayout>
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    app:cardCornerRadius="8dp">
-
-                    <EditText
-                        android:id="@+id/note_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/tag_input_bg"
-                        android:gravity="top"
-                        android:hint="@string/placeholder_thought_name"
-                        android:lineHeight="20dp"
-                        android:maxLength="50"
-                        android:maxLines="5"
-                        android:minLines="2"
-                        android:paddingStart="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="8dp"
-                        android:textColor="@color/tag_input_text_color" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-
-                    <EditText
-                        android:id="@+id/note_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/tag_input_bg"
-                        android:gravity="top"
-                        android:hint="@string/placeholder_thought_text"
-                        android:lineHeight="20dp"
-                        android:minLines="10"
-                        android:paddingStart="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="8dp"
-                        android:textColor="@color/tag_input_text_color">
-
-                    </EditText>
-                </androidx.cardview.widget.CardView>
-
-
-                <Button
-                    android:id="@+id/submit_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="24dp"
-                    android:backgroundTint="@color/primary_button_bg"
-                    android:minHeight="48dp"
-                    android:paddingVertical="8dp"
-                    android:text="Submit"
-                    android:textColor="@color/white">
-
-                </Button>
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>
