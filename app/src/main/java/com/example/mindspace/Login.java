@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mindspace.api_request.LoginRequest;
+import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.UserProfile;
 import com.example.mindspace.ui_components.LoadingButton;
@@ -84,7 +85,7 @@ public class Login extends AppCompatActivity {
             ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
             LoginRequest loginRequest = new LoginRequest(emailValue, passwordValue);
 
-            Call<AuthResponseConfig> call = apiService.login(loginRequest);
+            Call<AuthResponseConfig> call = apiService.login(Wrap.d(loginRequest));
 
 
             call.enqueue(new Callback<AuthResponseConfig>() {

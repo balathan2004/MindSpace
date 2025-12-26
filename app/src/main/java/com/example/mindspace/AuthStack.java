@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mindspace.api_request.RefreshTokenRequest;
+import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.UserProfile;
 import com.google.gson.Gson;
@@ -42,7 +43,7 @@ public class AuthStack extends AppCompatActivity {
             ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
             RefreshTokenRequest req = new RefreshTokenRequest(refreshToken);
 
-            Call<AuthResponseConfig> call = apiService.updateRefreshToken(req);
+            Call<AuthResponseConfig> call = apiService.updateRefreshToken(Wrap.d(req));
 
 
             call.enqueue(new Callback<AuthResponseConfig>() {
@@ -50,7 +51,7 @@ public class AuthStack extends AppCompatActivity {
                 public void onResponse(Call<AuthResponseConfig> call, Response<AuthResponseConfig> response) {
                     if (response.isSuccessful()) {
                         AuthResponseConfig data = response.body();
-                        Log.i("console", "onResponse: "+data.getMessage());
+                        Log.i("console", "onResponse: " + data.getMessage());
                         state.setLoggedIn(data);
                         startMainStack();
 

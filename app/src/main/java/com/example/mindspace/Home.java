@@ -11,9 +11,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.example.mindspace.api_response.AuthResponseConfig;
+import com.example.mindspace.api_response.DataListResponse;
 import com.example.mindspace.databinding.SingleNoteCardBinding;
 import com.example.mindspace.ui_components.LoadingButton;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,21 +38,72 @@ public class Home extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstaceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstaceState);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home_page);
-        List<Note> noteArray = new ArrayList<>();
+
+        List<Thought> noteArray = new ArrayList<>();
+
+        ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
+
+        Log.i("console", "called api ");
+
+        Call<DataListResponse<Thought>> call = apiService.getThoughts();
+
+        call.enqueue(new Callback<DataListResponse<Thought>>() {
+            @Override
+            public void onResponse(Call<DataListResponse<Thought>> call, Response<DataListResponse<Thought>> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.i("console", "success");
+
+                    DataListResponse<Thought> data = response.body();
+                    Log.i("console", "response " + data.getMessage());
+
+                    noteArray.addAll(Arrays.asList(data.getData()));
+
+//                    note_list.removeAllViews();
+
+                    for (Thought note : noteArray) {
+                        addNotes(note);
+                    }
+
+                }
+
+               else{
+                    try {
+                        Log.i("console", "failure ");
+                        String errorJson = response.errorBody().string();
+                        AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
+                        Log.i("console", "response" + err);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
 
-        noteArray.add(new Note("GOAL! Stunning Free Kick!",
-                "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!"
-        ).setTags(Arrays.asList("messi", "ronaldo")));
+            }
 
-        noteArray.add(new Note("Red Card Issued!",
-                "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red."
-        ).setTags(Arrays.asList("messi", "ronaldo")));
+            @Override
+            public void onFailure(Call<DataListResponse<Thought>> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+//
+//        noteArray.add(new Thought("GOAL! Stunning Free Kick!",
+//                "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!"
+//        ).setTags(Arrays.asList("messi", "ronaldo")));
+//
+//        noteArray.add(new Thought("Red Card Issued!",
+//                "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red."
+//        ).setTags(Arrays.asList("messi", "ronaldo")));
 
         header = findViewById(R.id.header);
         headerTitle = findViewById(R.id.headerTitle);
@@ -66,12 +121,16 @@ public class Home extends AppCompatActivity {
         inflater = LayoutInflater.from(this);
 
 
-        int i;
+        Log.i("console", "size is ="+noteArray.size());
 
-        for (i = 0; i < noteArray.size(); i++) {
-            Note currentNote = noteArray.get(i);
-            addNotes(currentNote);
-        }
+
+
+//        int i;
+//
+//        for (i = 0; i < noteArray.size(); i++) {
+//            Thought currentNote = noteArray.get(i);
+//            addNotes(currentNote);
+//        }
 
 
         add_thought.setOnClickListener(e -> {
@@ -84,7 +143,7 @@ public class Home extends AppCompatActivity {
     }
 
 
-    public void addNotes(Note note) {
+    public void addNotes(Thought note) {
         inflater = LayoutInflater.from(this);
         SingleNoteCardBinding card = SingleNoteCardBinding.inflate(inflater, note_list, false);
         card.setNoteItem(note);

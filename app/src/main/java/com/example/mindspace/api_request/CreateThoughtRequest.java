@@ -1,12 +1,12 @@
 package com.example.mindspace.api_request;
 
-import com.example.mindspace.Note;
+import com.example.mindspace.Thought;
 
 public class CreateThoughtRequest {
 
-    private Note note;
+    private Thought note;
 
-    public CreateThoughtRequest(Note note) {
+    public CreateThoughtRequest(Thought note) {
         this.note = note;
     }
 

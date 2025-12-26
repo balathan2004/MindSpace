@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroFitClient {
 
     private static TokenIntercepter tokenInterceptor;
-    private static final String baseUrl = "https://9986a4f330e3.ngrok-free.app/";
+    private static final String baseUrl = "https://life-tracker-server-lightuzumaki-lightuzumaki-projects.vercel.app/";
     private static Retrofit retrofit;
 
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Note implements Serializable {
+public class Thought implements Serializable {
 
 
     private String _id;
@@ -23,7 +23,7 @@ public class Note implements Serializable {
 
     private List<String> tags;
 
-    public Note(String title, String desc) {
+    public Thought(String title, String desc) {
         this._id = Utils.generateShortUUID();
         this.title = title;
         this.desc = desc;
@@ -62,7 +62,7 @@ public class Note implements Serializable {
         return tags;
     }
 
-    public Note setTags(List<String> tags) {
+    public Thought setTags(List<String> tags) {
         this.tags = tags;
         return this;
     }

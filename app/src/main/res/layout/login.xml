@@ -103,7 +103,7 @@
                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_@."
                 android:hint="Enter Password"
                 android:inputType="textPassword"
-                android:maxLength="12" />
+                android:maxLength="24" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--        <Button-->

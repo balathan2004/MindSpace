@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.mindspace.api_request.CreateThoughtRequest;
+import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.ResponseConfig;
 import com.google.android.material.chip.Chip;
@@ -46,7 +47,7 @@ public class NotePage extends AppCompatActivity {
 
     Button submit_button;
     Chip remove_button;
-    Note NoteData = null;
+    Thought NoteData = null;
     private List<String> tags = new ArrayList<String>();
 
     @Override
@@ -55,7 +56,7 @@ public class NotePage extends AppCompatActivity {
         setContentView(R.layout.notes_page);
 
 
-        NoteData = (Note) getIntent().getSerializableExtra("Note");
+        NoteData = (Thought) getIntent().getSerializableExtra("Note");
 
         EditText title = findViewById(R.id.note_title);
         EditText desc = findViewById(R.id.note_text);
@@ -65,8 +66,7 @@ public class NotePage extends AppCompatActivity {
         backarrow.setOnClickListener(e -> {
             finish();
         });
-//
-//        getReq();
+
 
 
         if (NoteData != null) {
@@ -75,7 +75,7 @@ public class NotePage extends AppCompatActivity {
             List<String> tagsValue = NoteData.getTags();
             tags.addAll(tagsValue);
         } else {
-            NoteData = new Note("", "");
+            NoteData = new Thought("", "");
         }
 
         chipGroup = findViewById(R.id.tag_chip_group);
@@ -227,27 +227,7 @@ public class NotePage extends AppCompatActivity {
         }
     }
 
-//    private void getReq(){
-//        ApiService  apiService=RetroFitClient.GetRetroFit(this).create(ApiService.class);
-//
-//        Call<ResponseConfig> call=apiService.getDocs();
-//
-//        call.enqueue(new Callback<ResponseConfig>() {
-//            @Override
-//            public void onResponse(Call<ResponseConfig> call, Response<ResponseConfig> response) {
-//                if(response.isSuccessful()){
-//                    ResponseConfig data =response.body();
-//                    Log.i("console", "hello wolrd: "+data.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseConfig> call, Throwable t) {
-//
-//            }
-//        });
-//
-//    }
+
 
     private void CreateNote() {
 
@@ -255,7 +235,7 @@ public class NotePage extends AppCompatActivity {
 
         ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
         CreateThoughtRequest request = new CreateThoughtRequest(NoteData);
-        Call<ResponseConfig> call = apiService.createThought(request);
+        Call<ResponseConfig> call = apiService.createThought(Wrap.d(request));
 
         call.enqueue(new Callback<ResponseConfig>() {
             @Override
