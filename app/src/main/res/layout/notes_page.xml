@@ -4,10 +4,13 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
 
-    <include layout="@layout/header_layout" />
+    <com.example.mindspace.ui_components.CustomHeader
+        android:id="@+id/custom_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:headerTitle="Cowsika" />
 
 
     <androidx.core.widget.NestedScrollView
@@ -67,52 +70,50 @@
             </HorizontalScrollView>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    app:cardCornerRadius="8dp">
 
-
-                    <androidx.cardview.widget.CardView
+                    <EditText
+                        android:id="@+id/note_text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="8dp">
+                        android:layout_height="match_parent"
+                        android:background="@color/tag_input_bg"
+                        android:gravity="top"
+                        android:hint="@string/placeholder_thought_text"
+                        android:lineHeight="20dp"
+                        android:minLines="10"
+                        android:paddingStart="12dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/tag_input_text_color">
 
-                        <EditText
-                            android:id="@+id/note_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/tag_input_bg"
-                            android:gravity="top"
-                            android:hint="@string/placeholder_thought_text"
-                            android:lineHeight="20dp"
-                            android:minLines="10"
-                            android:paddingStart="12dp"
-                            android:paddingTop="12dp"
-                            android:paddingEnd="12dp"
-                            android:paddingBottom="8dp"
-                            android:textColor="@color/tag_input_text_color">
-
-                        </EditText>
-                    </androidx.cardview.widget.CardView>
+                    </EditText>
+                </androidx.cardview.widget.CardView>
 
 
-                    <Button
-                        android:id="@+id/submit_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="24dp"
-                        android:backgroundTint="@color/primary_button_bg"
-                        android:minHeight="48dp"
-                        android:paddingVertical="8dp"
-                        android:text="Submit"
-                        android:textColor="@color/white">
+                <Button
+                    android:id="@+id/submit_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="24dp"
+                    android:backgroundTint="@color/primary_button_bg"
+                    android:minHeight="48dp"
+                    android:paddingVertical="8dp"
+                    android:text="Submit"
+                    android:textColor="@color/white">
 
-                    </Button>
+                </Button>
 
-                </LinearLayout>
+            </LinearLayout>
 
 
         </LinearLayout>

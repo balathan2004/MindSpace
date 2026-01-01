@@ -12,8 +12,6 @@ public class TokenIntercepter implements Interceptor {
 
     private String accessToken;
 
-
-
     public TokenIntercepter(AuthState state) {
         this.accessToken = state.getAccessToken();
     }
@@ -21,7 +19,6 @@ public class TokenIntercepter implements Interceptor {
     public String getAccessToken() {
         return accessToken;
     }
-
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
@@ -29,13 +26,9 @@ public class TokenIntercepter implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
 
-
         Request original = chain.request();
-
         Request.Builder builder = original.newBuilder().header("Authorization", "Bearer " + accessToken);
-
         Request request = builder.build();
         return chain.proceed(request);
-
     }
 }

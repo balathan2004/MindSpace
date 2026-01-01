@@ -2,28 +2,32 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/root">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Only this page uses header -->
-        <include layout="@layout/header_layout" />
+        <com.example.mindspace.ui_components.CustomHeader
+            android:id="@+id/custom_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:headerTitle="Cowsika" />
 
         <!-- Your other content -->
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
         android:scrollbars="none">
-
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

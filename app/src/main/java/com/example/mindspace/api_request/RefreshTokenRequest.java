@@ -10,6 +10,6 @@ public class RefreshTokenRequest {
     }
 
     public String getRefreshToken() {
-        return refreshToken;
+        return this.refreshToken;
     }
 }

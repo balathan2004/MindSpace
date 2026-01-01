@@ -1,16 +1,18 @@
 package com.example.mindspace;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,75 +21,79 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.mindspace.api_request.CreateThoughtRequest;
 import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
+import com.example.mindspace.api_response.DataResponse;
 import com.example.mindspace.api_response.ResponseConfig;
+import com.example.mindspace.ui_components.BottomSheetComponent;
+import com.example.mindspace.ui_components.CustomHeader;
+import com.example.mindspace.ui_components.LabelValue;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class NotePage extends AppCompatActivity {
 
     ChipGroup chipGroup;
 
     EditText tag_input;
+    EditText title;
+
+    EditText desc;
     TextInputLayout tag_input_container;
 
     Button submit_button;
     Chip remove_button;
-    Thought NoteData = null;
+    Thought ThoughtData = null;
+
+    String doc_id = null;
     private List<String> tags = new ArrayList<String>();
+
+    ApiService apiService;
+
+    BottomSheetComponent sheet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
 
+        LinearLayout root = findViewById(R.id.root);
 
-        NoteData = (Thought) getIntent().getSerializableExtra("Note");
+        CustomHeader header = findViewById(R.id.custom_header);
 
-        EditText title = findViewById(R.id.note_title);
-        EditText desc = findViewById(R.id.note_text);
-        ImageView backarrow = findViewById(R.id.back_arrow);
-
-
-        backarrow.setOnClickListener(e -> {
-            finish();
-        });
+        header.setTitle("Cowsika");
+        header.showBack(false);
 
 
+        title = findViewById(R.id.note_title);
+        desc = findViewById(R.id.note_text);
+        apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
 
-        if (NoteData != null) {
-            title.setText(NoteData.getTitle());
-            desc.setText(NoteData.getDesc());
-            List<String> tagsValue = NoteData.getTags();
-            tags.addAll(tagsValue);
-        } else {
-            NoteData = new Thought("", "");
-        }
+
+        doc_id = (String) getIntent().getSerializableExtra("doc_id");
+
+        getThought(doc_id);
 
         chipGroup = findViewById(R.id.tag_chip_group);
         tag_input = findViewById(R.id.add_tag);
         tag_input_container = findViewById(R.id.add_tag_container);
         Drawable add_icon = ContextCompat.getDrawable(this, R.drawable.ic_add);
-
-
-        TextView header = findViewById(R.id.headerTitle);
-
-        header.setText("Notes");
-        renderNameChips();
 
 
         submit_button = findViewById(R.id.submit_button);
@@ -102,7 +108,80 @@ public class NotePage extends AppCompatActivity {
         });
 
 
-        tag_input.addTextChangedListener(new TextWatcher() {
+        TextChangeHandler(tag_input);
+
+
+        tag_input.setOnEditorActionListener((v, actionId, event) -> {
+            if (EditorInfo.IME_ACTION_SEND == actionId) {
+                addTag();
+                return true;
+            }
+            tag_input.requestFocus();
+            return false;
+
+        });
+
+
+        submit_button.setOnClickListener(e -> submit()
+        );
+
+    }
+
+    public void initSheet() {
+        LinearLayout container = new LinearLayout(this);
+
+        container.setOrientation(LinearLayout.VERTICAL);
+
+        container.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+
+        Map<String, String> times = new LinkedHashMap<>();
+
+        times.put("Title", "Cowsika");
+        times.put("Created", "Harini");
+        times.put("Reads", "Gnanasiri");
+        times.put("Create AT ", ThoughtData.getCreatedAt());
+        times.put("Occured At", ThoughtData.getOccurredAt());
+
+
+        for (Map.Entry<String, String> data : times.entrySet()) {
+            LabelValue labelRenderer = new LabelValue(this);
+            labelRenderer.AttachLabelValue(container, data.getKey(), data.getValue());
+        }
+
+        sheet = BottomSheetComponent.newInstance(container);
+
+    }
+
+
+    public void submit() {
+        String note_title = new InputValidator(title).setMinLength(3).validate();
+        String note_text = new InputValidator(desc).setMinLength(6).validate();
+
+        if (note_title == null || note_text == null) {
+            Toast.makeText(NotePage.this, "Title or Content Missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ThoughtData.setDesc(note_text.trim());
+        ThoughtData.setTitle(note_title.trim());
+
+        ThoughtData.setTags(tags);
+        ThoughtData.addTime();
+
+        CreateNote();
+
+        Log.i("console", ThoughtData.toString());
+    }
+
+
+    public void TextChangeHandler(EditText input) {
+
+
+        input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -125,37 +204,6 @@ public class NotePage extends AppCompatActivity {
             }
         });
 
-
-        tag_input.setOnEditorActionListener((v, actionId, event) -> {
-            if (EditorInfo.IME_ACTION_SEND == actionId) {
-                addTag();
-                return true;
-            }
-            tag_input.requestFocus();
-            return false;
-
-        });
-
-
-        submit_button.setOnClickListener(e -> {
-            String note_title = new InputValidator(title).setMinLength(3).validate();
-            String note_text = new InputValidator(desc).setMinLength(6).validate();
-
-            if (note_title == null || note_text == null) {
-                Toast.makeText(NotePage.this, "Title or Content Missing", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            NoteData.setDesc(note_text);
-            NoteData.setTitle(note_title);
-
-            NoteData.setTags(tags);
-
-            CreateNote();
-
-            Log.i("console", NoteData.toString());
-
-        });
 
     }
 
@@ -217,25 +265,17 @@ public class NotePage extends AppCompatActivity {
         String tag_name = new InputValidator(tag_input).setMinLength(3).validate();
 
         if (tag_name != null) {
-            Log.i("console", tag_name);
 
-
-            tags.add(tag_name);
-
+            tags.add(tag_name.trim());
             renderNameChips();
             tag_input.setText("");
         }
     }
 
 
-
     private void CreateNote() {
 
-        Utils.ShowToast(NotePage.this, "Called CreateNote");
-
-        ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
-        CreateThoughtRequest request = new CreateThoughtRequest(NoteData);
-        Call<ResponseConfig> call = apiService.createThought(Wrap.d(request));
+        Call<ResponseConfig> call = apiService.patchThought(Wrap.d(ThoughtData), ThoughtData.get_id());
 
         call.enqueue(new Callback<ResponseConfig>() {
             @Override
@@ -257,6 +297,52 @@ public class NotePage extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseConfig> call, Throwable t) {
                 Log.e("console", "Error: " + t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void getThought(String doc_id) {
+
+        if (doc_id == null) return;
+
+        Call<DataResponse<Thought>> call = apiService.getSingleThought(doc_id);
+
+
+        call.enqueue(new Callback<DataResponse<Thought>>() {
+            @Override
+            public void onResponse(Call<DataResponse<Thought>> call, Response<DataResponse<Thought>> response) {
+
+                if (response.isSuccessful()) {
+                    DataResponse<Thought> res = response.body();
+
+
+                    ThoughtData = response.body().getData();
+
+                    title.setText(ThoughtData.getTitle());
+                    desc.setText(ThoughtData.getDesc());
+                    tags.clear();
+                    tags.addAll(ThoughtData.getTags());
+                    renderNameChips();
+                    initSheet();
+                } else {
+                    try {
+                        Log.i("console", "failure ");
+                        String errorJson = response.errorBody().string();
+                        AuthResponseConfig err = new Gson().fromJson(errorJson, AuthResponseConfig.class);
+                        Log.i("console", "response" + err);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<DataResponse<Thought>> call, Throwable t) {
+
             }
         });
 

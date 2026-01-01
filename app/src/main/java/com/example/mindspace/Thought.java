@@ -13,7 +13,8 @@ public class Thought implements Serializable {
     private String _id;
     private String title;
     private String desc;
-    private String time;
+    private String occurredAt;
+
 
     private String createdAt;
 
@@ -23,19 +24,32 @@ public class Thought implements Serializable {
 
     private List<String> tags;
 
+
+    public Thought() {
+
+    }
+
     public Thought(String title, String desc) {
         this._id = Utils.generateShortUUID();
         this.title = title;
         this.desc = desc;
-        this.createdAt = Utils.getISOString();
-        this.lastModified = Utils.getISOString();
-        this.readsAt = Arrays.asList(Utils.getISOString());
+        this.createdAt = "";
+        this.lastModified = "";
+        this.readsAt = new ArrayList<String>();
         this.tags = new ArrayList<String>();
     }
 
 
-    public String getTime() {
-        return this.time;
+    public String get_id() {
+        return _id;
+    }
+
+    public String getOccurredAt() {
+        return this.occurredAt;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     public String getTitle() {
@@ -46,8 +60,8 @@ public class Thought implements Serializable {
         this.title = title;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setOccurredAt(String occurredAt) {
+        this.occurredAt = occurredAt;
     }
 
     public String getDesc() {
@@ -67,6 +81,20 @@ public class Thought implements Serializable {
         return this;
     }
 
+    public void addTime() {
+        String localTime = Utils.getISOString();
+        if (this.occurredAt ==null || this.occurredAt.trim().contentEquals("")) {
+            this.occurredAt = localTime;
+        }
+        this.lastModified = localTime;
+        this.readsAt.add(localTime);
+    }
+
+    public void updateReadsAt(){
+        String localTime = Utils.getISOString();
+        this.readsAt.add(localTime);
+    }
+
 
     @NonNull
     @Override
@@ -75,7 +103,9 @@ public class Thought implements Serializable {
                 "_id='" + _id + '\'' +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
-                ", time='" + time + '\'' +
+                ", occurredAt='" + occurredAt + '\'' +
+                ", readsAt='" + readsAt + '\'' +
+                ", lastModified='" + lastModified + '\'' +
                 ", tags=" + tags.toString() +
                 '}';
     }

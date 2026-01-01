@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataListResponse;
 import com.example.mindspace.databinding.SingleNoteCardBinding;
+import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.LoadingButton;
 import com.google.gson.Gson;
 
@@ -30,12 +33,14 @@ import retrofit2.Response;
 
 public class Home extends AppCompatActivity {
 
-    LinearLayout header;
-    TextView headerTitle;
-    LinearLayout note_list;
+    CustomHeader header;
 
+    LinearLayout note_list;
     LayoutInflater inflater;
 
+
+    SwipeRefreshLayout swipeRefresh;
+    List<Thought> noteArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +49,52 @@ public class Home extends AppCompatActivity {
 
         setContentView(R.layout.home_page);
 
-        List<Thought> noteArray = new ArrayList<>();
+        header =findViewById(R.id.custom_header);
 
+        header.setTitle("Hello world");
+
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+
+        Button add_thought = findViewById(R.id.create_thought_btn);
+
+        note_list = findViewById(R.id.note_list);
+
+        inflater = LayoutInflater.from(this);
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(true);
+            loadThoughts();
+            swipeRefresh.setRefreshing(false);
+        });
+
+
+        add_thought.setOnClickListener(e -> {
+            Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
+            startActivity(NotePage);
+        });
+        loadThoughts();
+    }
+
+
+    public void addNotes(Thought Thought) {
+        inflater = LayoutInflater.from(this);
+        SingleNoteCardBinding card = SingleNoteCardBinding.inflate(inflater, note_list, false);
+        card.setNoteItem(Thought);
+        card.executePendingBindings();
+
+        card.getRoot().setOnClickListener(e -> {
+            Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
+            NotePage.putExtra("doc_id", Thought.get_id());
+            startActivity(NotePage);
+        });
+
+        note_list.addView(card.getRoot());
+    }
+
+
+    public void loadThoughts() {
         ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
 
-        Log.i("console", "called api ");
 
         Call<DataListResponse<Thought>> call = apiService.getThoughts();
 
@@ -63,17 +109,17 @@ public class Home extends AppCompatActivity {
                     DataListResponse<Thought> data = response.body();
                     Log.i("console", "response " + data.getMessage());
 
+                    noteArray.clear();
+
                     noteArray.addAll(Arrays.asList(data.getData()));
 
-//                    note_list.removeAllViews();
+                    note_list.removeAllViews();
 
                     for (Thought note : noteArray) {
                         addNotes(note);
                     }
 
-                }
-
-               else{
+                } else {
                     try {
                         Log.i("console", "failure ");
                         String errorJson = response.errorBody().string();
@@ -92,70 +138,7 @@ public class Home extends AppCompatActivity {
 
             }
         });
-
-
-
-
-//
-//        noteArray.add(new Thought("GOAL! Stunning Free Kick!",
-//                "Ronaldo lines it up from 25 yards... and curls it perfectly into the top corner! Keeper had no chance. What a strike!"
-//        ).setTags(Arrays.asList("messi", "ronaldo")));
-//
-//        noteArray.add(new Thought("Red Card Issued!",
-//                "A reckless, two-footed challenge from the defender in midfield. The referee doesn't hesitate. That's a straight red."
-//        ).setTags(Arrays.asList("messi", "ronaldo")));
-
-        header = findViewById(R.id.header);
-        headerTitle = findViewById(R.id.headerTitle);
-
-        Button add_thought = findViewById(R.id.create_thought_btn);
-
-        headerTitle.setText("Home");
-        LinearLayout headerRight = findViewById(R.id.headerRight);
-
-        header.removeView(headerRight);
-
-
-        note_list = findViewById(R.id.note_list);
-
-        inflater = LayoutInflater.from(this);
-
-
-        Log.i("console", "size is ="+noteArray.size());
-
-
-
-//        int i;
-//
-//        for (i = 0; i < noteArray.size(); i++) {
-//            Thought currentNote = noteArray.get(i);
-//            addNotes(currentNote);
-//        }
-
-
-        add_thought.setOnClickListener(e -> {
-
-            Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
-            startActivity(NotePage);
-        });
-
-
     }
 
-
-    public void addNotes(Thought note) {
-        inflater = LayoutInflater.from(this);
-        SingleNoteCardBinding card = SingleNoteCardBinding.inflate(inflater, note_list, false);
-        card.setNoteItem(note);
-        card.executePendingBindings();
-
-        card.getRoot().setOnClickListener(e -> {
-            Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
-            NotePage.putExtra("Note", note);
-            startActivity(NotePage);
-        });
-
-        note_list.addView(card.getRoot());
-    }
 
 }

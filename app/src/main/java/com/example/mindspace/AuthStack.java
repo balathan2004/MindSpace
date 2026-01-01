@@ -39,7 +39,7 @@ public class AuthStack extends AppCompatActivity {
             Log.e("console", "cred is null");
             StartLogin();
         } else {
-            Log.e("console", refreshToken);
+//            Log.e("console", refreshToken);
             ApiService apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
             RefreshTokenRequest req = new RefreshTokenRequest(refreshToken);
 
@@ -51,7 +51,7 @@ public class AuthStack extends AppCompatActivity {
                 public void onResponse(Call<AuthResponseConfig> call, Response<AuthResponseConfig> response) {
                     if (response.isSuccessful()) {
                         AuthResponseConfig data = response.body();
-                        Log.i("console", "onResponse: " + data.getMessage());
+//                        Log.i("console", "onResponse: " + data.getMessage());
                         state.setLoggedIn(data);
                         startMainStack();
 
