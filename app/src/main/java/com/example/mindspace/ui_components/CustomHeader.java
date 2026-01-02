@@ -32,12 +32,14 @@ public class CustomHeader extends LinearLayout {
 
         super(context, attrs);
         this.context = context;
+        init(attrs);
 
     }
 
     private void init(AttributeSet attrs) {
         LayoutInflater.from(context).inflate(R.layout.custom_header, this, true);
         headerTitle = findViewById(R.id.headerTitle);
+
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomHeader);
             String title = a.getString(R.styleable.CustomHeader_headerTitle);
@@ -54,6 +56,8 @@ public class CustomHeader extends LinearLayout {
         super.onFinishInflate();
         headerLeft = findViewById(R.id.back_arrow);
         headerRight = findViewById(R.id.headerRight);
+        boolean canShowBack = !((Activity) context).isTaskRoot();
+        headerLeft.setVisibility(canShowBack ? VISIBLE : GONE);
     }
 
     public void setTitle(String text) {
@@ -61,16 +65,11 @@ public class CustomHeader extends LinearLayout {
     }
 
     public void showBack(boolean show) {
-        boolean canShowBack = !((Activity) context).isTaskRoot();
-        Log.i("console", "showBack: is root" + canShowBack);
-
         if (headerLeft == null) return;
 
         if (!show) {
             headerLeft.setVisibility(GONE);
-            return;
         }
-        headerLeft.setVisibility(canShowBack ? VISIBLE : GONE);
     }
 
     public void addRight(View view) {

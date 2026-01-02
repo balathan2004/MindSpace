@@ -21,11 +21,10 @@ public class RetroFitClient {
         AuthState authState = (AuthState) context.getApplicationContext();
         if (tokenInterceptor == null) {
 
-            Log.i("console", "GetRetroFitNull: "+authState.getAccessToken());
             tokenInterceptor = new TokenIntercepter(authState);
         } else {
             tokenInterceptor.setAccessToken(authState.getAccessToken());
-            Log.i("console", "GetRetroFitFull: "+authState.getAccessToken());
+
         }
 
         OkHttpClient client = new OkHttpClient.Builder()

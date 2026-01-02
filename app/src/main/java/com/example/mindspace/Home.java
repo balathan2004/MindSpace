@@ -17,6 +17,7 @@ import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataListResponse;
 import com.example.mindspace.databinding.SingleNoteCardBinding;
 import com.example.mindspace.ui_components.CustomHeader;
+import com.example.mindspace.ui_components.CustomLoader;
 import com.example.mindspace.ui_components.LoadingButton;
 import com.google.gson.Gson;
 
@@ -38,6 +39,8 @@ public class Home extends AppCompatActivity {
     LinearLayout note_list;
     LayoutInflater inflater;
 
+    CustomLoader loader;
+
 
     SwipeRefreshLayout swipeRefresh;
     List<Thought> noteArray = new ArrayList<>();
@@ -50,6 +53,8 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.home_page);
 
         header =findViewById(R.id.custom_header);
+
+        loader=findViewById(R.id.custom_loader);
 
         header.setTitle("Hello world");
 
@@ -113,7 +118,10 @@ public class Home extends AppCompatActivity {
 
                     noteArray.addAll(Arrays.asList(data.getData()));
 
+
                     note_list.removeAllViews();
+
+                    loader.setVisibility(false);
 
                     for (Thought note : noteArray) {
                         addNotes(note);

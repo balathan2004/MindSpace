@@ -66,6 +66,7 @@ public class NotePage extends AppCompatActivity {
     ApiService apiService;
 
     BottomSheetComponent sheet;
+    CustomHeader header;
 
 
     @Override
@@ -75,10 +76,9 @@ public class NotePage extends AppCompatActivity {
 
         LinearLayout root = findViewById(R.id.root);
 
-        CustomHeader header = findViewById(R.id.custom_header);
+        header = findViewById(R.id.custom_header);
 
-        header.setTitle("Cowsika");
-        header.showBack(false);
+        header.setTitle("Note");
 
 
         title = findViewById(R.id.note_title);
@@ -322,6 +322,7 @@ public class NotePage extends AppCompatActivity {
 
                     title.setText(ThoughtData.getTitle());
                     desc.setText(ThoughtData.getDesc());
+                    header.setTitle(ThoughtData.getTitle());
                     tags.clear();
                     tags.addAll(ThoughtData.getTags());
                     renderNameChips();

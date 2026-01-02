@@ -13,6 +13,12 @@
         android:layout_height="wrap_content"
         app:headerTitle="Cowsika" />
 
+    <com.example.mindspace.ui_components.CustomLoader
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/custom_loader"
+        />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
