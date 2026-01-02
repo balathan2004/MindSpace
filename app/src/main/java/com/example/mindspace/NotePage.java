@@ -27,6 +27,7 @@ import com.example.mindspace.api_response.DataResponse;
 import com.example.mindspace.api_response.ResponseConfig;
 import com.example.mindspace.ui_components.BottomSheetComponent;
 import com.example.mindspace.ui_components.CustomHeader;
+import com.example.mindspace.ui_components.CustomLoader;
 import com.example.mindspace.ui_components.LabelValue;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -60,6 +61,8 @@ public class NotePage extends AppCompatActivity {
     Chip remove_button;
     Thought ThoughtData = null;
 
+    CustomLoader loader;
+
     String doc_id = null;
     private List<String> tags = new ArrayList<String>();
 
@@ -77,8 +80,11 @@ public class NotePage extends AppCompatActivity {
         LinearLayout root = findViewById(R.id.root);
 
         header = findViewById(R.id.custom_header);
+        loader = findViewById(R.id.custom_loader);
 
         header.setTitle("Note");
+
+        injectRight();
 
 
         title = findViewById(R.id.note_title);
@@ -87,6 +93,7 @@ public class NotePage extends AppCompatActivity {
 
 
         doc_id = (String) getIntent().getSerializableExtra("doc_id");
+
 
         getThought(doc_id);
 
@@ -305,7 +312,11 @@ public class NotePage extends AppCompatActivity {
 
     private void getThought(String doc_id) {
 
-        if (doc_id == null) return;
+        if (doc_id == null) {
+            loader.setVisibility(false);
+            return;
+        }
+        ;
 
         Call<DataResponse<Thought>> call = apiService.getSingleThought(doc_id);
 
@@ -338,6 +349,8 @@ public class NotePage extends AppCompatActivity {
                     }
                 }
 
+                loader.setVisibility(false);
+
 
             }
 
@@ -348,6 +361,17 @@ public class NotePage extends AppCompatActivity {
         });
 
 
+    }
+
+    private void injectRight() {
+        LinearLayout container = new LinearLayout(this);
+        ImageView historyIcon = new ImageView(this);
+        historyIcon.setImageResource(R.drawable.ic_history_icon);
+        ImageView markIcon = new ImageView(this);
+        markIcon.setImageResource(R.drawable.ic_save_icon);
+        container.addView(markIcon);
+        container.addView(historyIcon);
+        header.addRight(container);
     }
 
 

@@ -14,7 +14,7 @@
         app:headerTitle="Cowsika" />
 
     <com.example.mindspace.ui_components.CustomLoader
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/custom_loader"
         />
