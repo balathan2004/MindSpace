@@ -6,21 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mindspace.api_request.LoginRequest;
 import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
-import com.example.mindspace.api_response.UserProfile;
 import com.example.mindspace.ui_components.LoadingButton;
+import com.example.mindspace.utils.Utils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

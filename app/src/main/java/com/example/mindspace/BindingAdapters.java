@@ -1,14 +1,14 @@
 package com.example.mindspace;
 
-
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import com.example.mindspace.utils.TimeUtils;
+import com.example.mindspace.utils.Utils;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class BindingAdapters {
@@ -18,24 +18,31 @@ public class BindingAdapters {
 
         if (isoTime == null || isoTime.isEmpty()) return;
 
-        try {
-            SimpleDateFormat iso =
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-            iso.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            Date date = iso.parse(isoTime);
+        LocalDateTime date = TimeUtils.IsoDateParser(isoTime);
 
-            SimpleDateFormat out =
-                    new SimpleDateFormat(pattern, Locale.getDefault());
+        String out = date.format(DateTimeFormatter.ofPattern(pattern));
 
-            String text = prefix + out.format(date);
+        String text = prefix + out;
 
-            view.setText(text);
+        view.setText(text);
 
-        } catch (Exception e) {
-            String text = prefix + isoTime;
-            view.setText(text); // fallback
-        }
+    }
+
+    @BindingAdapter({"formattedTime", "prefixText"})
+    public static void setFormattedTime(TextView view, String isoTime, String prefix) {
+
+        if (isoTime == null || isoTime.isEmpty()) return;
+
+
+        LocalDateTime date = TimeUtils.IsoDateParser(isoTime);
+
+        String out = TimeUtils.formatFromNow(date);
+
+        String text = prefix +" "+ out;
+
+        view.setText(text);
+
     }
 
 }

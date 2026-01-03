@@ -62,7 +62,7 @@
                     android:textSize="12sp"
                     app:formattedTime="@{noteItem.occurredAt}"
                     app:prefixText='@{"Last Modified"}'
-                    app:timePattern='@{"dd-MMM-yy hh:mm a"}'
+
 
                     />
 

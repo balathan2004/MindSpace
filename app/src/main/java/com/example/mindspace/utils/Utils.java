@@ -1,34 +1,17 @@
-package com.example.mindspace;
-
-import static androidx.core.content.ContextCompat.startActivity;
+package com.example.mindspace.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 public class Utils {
-
-
-    public static String getISOString() {
-
-        Instant now = Instant.now();
-
-        return now.toString();
-
-    }
-
-    public static String format(long time, String pattern) {
-        return LocalDateTime
-                .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
-                .format(DateTimeFormatter.ofPattern(pattern));
-    }
 
 
     public static String generateShortUUID() {
@@ -38,7 +21,6 @@ public class Utils {
     public static void ShowToast(Context context, String message) {
 
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-
     }
 
     public static void Navigate(Context from, Class to, Boolean clearStack) {
@@ -50,8 +32,5 @@ public class Utils {
             return;
         }
         from.startActivity(page);
-
     }
-
-
 }

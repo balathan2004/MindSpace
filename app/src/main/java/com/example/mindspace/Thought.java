@@ -2,9 +2,11 @@ package com.example.mindspace;
 
 import androidx.annotation.NonNull;
 
+import com.example.mindspace.utils.TimeUtils;
+import com.example.mindspace.utils.Utils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Thought implements Serializable {
@@ -82,7 +84,7 @@ public class Thought implements Serializable {
     }
 
     public void addTime() {
-        String localTime = Utils.getISOString();
+        String localTime = TimeUtils.getISOString();
         if (this.occurredAt ==null || this.occurredAt.trim().contentEquals("")) {
             this.occurredAt = localTime;
         }
@@ -91,7 +93,7 @@ public class Thought implements Serializable {
     }
 
     public void updateReadsAt(){
-        String localTime = Utils.getISOString();
+        String localTime = TimeUtils.getISOString();
         this.readsAt.add(localTime);
     }
 

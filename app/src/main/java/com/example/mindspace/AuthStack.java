@@ -1,6 +1,5 @@
 package com.example.mindspace;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mindspace.api_request.RefreshTokenRequest;
 import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
-import com.example.mindspace.api_response.UserProfile;
+import com.example.mindspace.utils.Utils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Body;
 
 public class AuthStack extends AppCompatActivity {
 
