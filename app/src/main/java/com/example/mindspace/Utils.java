@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +22,12 @@ public class Utils {
 
         return now.toString();
 
+    }
+
+    public static String format(long time, String pattern) {
+        return LocalDateTime
+                .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(pattern));
     }
 
 

@@ -15,7 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataListResponse;
-import com.example.mindspace.databinding.SingleNoteCardBinding;
+import com.example.mindspace.databinding.ThoughtCardBinding;
 import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.CustomLoader;
 import com.example.mindspace.ui_components.LoadingButton;
@@ -83,7 +83,7 @@ public class Home extends AppCompatActivity {
 
     public void addNotes(Thought Thought) {
         inflater = LayoutInflater.from(this);
-        SingleNoteCardBinding card = SingleNoteCardBinding.inflate(inflater, note_list, false);
+        ThoughtCardBinding card = ThoughtCardBinding.inflate(inflater, note_list, false);
         card.setNoteItem(Thought);
         card.executePendingBindings();
 

@@ -48,6 +48,7 @@ public class CustomHeader extends LinearLayout {
                 headerTitle.setText(title);
             }
         }
+
     }
 
 
@@ -70,6 +71,10 @@ public class CustomHeader extends LinearLayout {
         if (!show) {
             headerLeft.setVisibility(GONE);
         }
+    }
+
+    public LinearLayout getHeaderRight() {
+        return headerRight;
     }
 
     public void addRight(View view) {

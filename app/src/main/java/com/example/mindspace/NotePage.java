@@ -1,21 +1,17 @@
 package com.example.mindspace;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +32,6 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +39,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class NotePage extends AppCompatActivity {
 
@@ -75,7 +68,7 @@ public class NotePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notes_page);
+        setContentView(R.layout.thought_page);
 
         LinearLayout root = findViewById(R.id.root);
 
@@ -231,7 +224,7 @@ public class NotePage extends AppCompatActivity {
 
 
     private Button renderSingleChip(LayoutInflater inflater, String name) {
-        Chip button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
+        Chip button = (Chip) inflater.inflate(R.layout.chip_button, chipGroup, false);
         button.setText(name);
 
 
@@ -252,7 +245,7 @@ public class NotePage extends AppCompatActivity {
     }
 
     private Button renderRemoveChip(LayoutInflater inflater) {
-        remove_button = (Chip) inflater.inflate(R.layout.button_tag, chipGroup, false);
+        remove_button = (Chip) inflater.inflate(R.layout.chip_button, chipGroup, false);
         remove_button.setText("Reset");
 
         remove_button.setCloseIconVisible(false);
@@ -363,15 +356,23 @@ public class NotePage extends AppCompatActivity {
 
     }
 
+    private void handleHistoryClick() {
+    }
+
+
     private void injectRight() {
-        LinearLayout container = new LinearLayout(this);
+
+        LinearLayout headerRight = header.getHeaderRight();
+        headerRight.removeAllViews();
+
+
         ImageView historyIcon = new ImageView(this);
         historyIcon.setImageResource(R.drawable.ic_history_icon);
         ImageView markIcon = new ImageView(this);
         markIcon.setImageResource(R.drawable.ic_save_icon);
-        container.addView(markIcon);
-        container.addView(historyIcon);
-        header.addRight(container);
+
+        headerRight.addView(markIcon);
+        headerRight.addView(historyIcon);
     }
 
 
