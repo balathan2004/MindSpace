@@ -24,18 +24,17 @@ public interface ApiService {
     @POST("auth/refreshToken")
     Call<AuthResponseConfig> updateRefreshToken(@Body DataWrapper<RefreshTokenRequest> refreshTokenRequest);
 
-    @POST("mindspace/thoughts")
-    Call<ResponseConfig> createThought(@Body DataWrapper<Thought> createThought);
+//    @POST("mindspace/thoughts")
+//    Call<ResponseConfig> createThought(@Body DataWrapper<Thought> createThought);
 
     @PUT("mindspace/thoughts/{id}")
-    Call<ResponseConfig> patchThought(@Body DataWrapper<Thought> patchThought, @Path("id") String id);
+    Call<ResponseConfig> putThought(@Body DataWrapper<Thought> patchThought, @Path("id") String id);
 
     @GET("mindspace/thoughts")
     Call<DataListResponse<Thought>> getThoughts();
 
     @GET("mindspace/thoughts/{id}")
     Call<DataResponse<Thought>> getSingleThought(@Path("id") String id);
-
 
 
 }

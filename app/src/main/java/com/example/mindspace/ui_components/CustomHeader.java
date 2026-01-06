@@ -56,6 +56,7 @@ public class CustomHeader extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         headerLeft = findViewById(R.id.back_arrow);
+        headerLeft.setOnClickListener(e ->finish());
         headerRight = findViewById(R.id.headerRight);
         boolean canShowBack = !((Activity) context).isTaskRoot();
         headerLeft.setVisibility(canShowBack ? VISIBLE : GONE);
@@ -63,6 +64,13 @@ public class CustomHeader extends LinearLayout {
 
     public void setTitle(String text) {
         if (headerTitle != null) headerTitle.setText(text);
+    }
+
+    private void finish() {
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        }
+
     }
 
     public void showBack(boolean show) {

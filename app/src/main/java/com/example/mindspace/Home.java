@@ -11,11 +11,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwnerKt;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataListResponse;
 import com.example.mindspace.databinding.ThoughtCardBinding;
+import com.example.mindspace.db.AppDatabase;
+import com.example.mindspace.db.ThoughtRepo;
 import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.CustomLoader;
 import com.example.mindspace.ui_components.LoadingButton;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
 
+import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +45,8 @@ public class Home extends AppCompatActivity {
 
     CustomLoader loader;
 
+    ThoughtRepo repo;
+
 
     SwipeRefreshLayout swipeRefresh;
     List<Thought> noteArray = new ArrayList<>();
@@ -52,9 +58,11 @@ public class Home extends AppCompatActivity {
 
         setContentView(R.layout.home_page);
 
-        header =findViewById(R.id.custom_header);
+        repo = new ThoughtRepo(this);
 
-        loader=findViewById(R.id.custom_loader);
+        header = findViewById(R.id.custom_header);
+
+        loader = findViewById(R.id.custom_loader);
 
         header.setTitle("Hello world");
 
@@ -71,6 +79,8 @@ public class Home extends AppCompatActivity {
             loadThoughts();
             swipeRefresh.setRefreshing(false);
         });
+
+        getFrom();
 
 
         add_thought.setOnClickListener(e -> {
@@ -89,7 +99,7 @@ public class Home extends AppCompatActivity {
 
         card.getRoot().setOnClickListener(e -> {
             Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
-            NotePage.putExtra("doc_id", Thought.get_id());
+            NotePage.putExtra("doc_id", Thought.getId());
             startActivity(NotePage);
         });
 
@@ -117,6 +127,8 @@ public class Home extends AppCompatActivity {
                     noteArray.clear();
 
                     noteArray.addAll(Arrays.asList(data.getData()));
+
+//                    addDocs(Arrays.asList(data.getData()));
 
 
                     note_list.removeAllViews();
@@ -146,6 +158,18 @@ public class Home extends AppCompatActivity {
 
             }
         });
+    }
+
+    public List<Thought> getFrom() {
+
+        LifecycleOwnerKt.getLifecycleScope(this).launch(() -> {
+            repo.getAllThoughts().collect(thoughts -> {
+                renderUI(thoughts);
+                return Unit.INSTANCE;
+            });
+        });
+
+
     }
 
 

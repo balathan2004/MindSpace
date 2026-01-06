@@ -60,7 +60,7 @@
                     android:layout_weight="1"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
-                    app:formattedTime="@{noteItem.occurredAt}"
+                    app:formattedTime="@{noteItem.lastModified}"
                     app:prefixText='@{"Last Modified"}'
 
 

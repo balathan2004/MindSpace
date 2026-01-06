@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -15,10 +16,8 @@ public class TimeUtils {
     }
 
 
-    public static String format(long time, String pattern) {
-        return LocalDateTime
-                .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
-                .format(DateTimeFormatter.ofPattern(pattern));
+    public static String format(LocalDateTime time, String pattern) {
+        return time.format(DateTimeFormatter.ofPattern(pattern));
     }
 
     public static String formatFromNow(LocalDateTime date) {
@@ -30,16 +29,17 @@ public class TimeUtils {
 
     public static LocalDateTime IsoDateParser(String isoTime) {
 
-        LocalDateTime finalDate = LocalDateTime.now();
+        LocalDateTime finalDate = now();
 
         if (isoTime == null) return finalDate;
 
         try {
-            finalDate = LocalDateTime.parse(isoTime);
-
+            OffsetDateTime odt = OffsetDateTime.parse(isoTime);
+            // Convert to LocalDateTime in system default timezone
+            return odt.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 
         } catch (Exception e) {
-            Log.i("console", "IsoDateParser: ", e);
+            Log.i("print", "IsoDateParser: ", e);
         }
         return finalDate;
     }

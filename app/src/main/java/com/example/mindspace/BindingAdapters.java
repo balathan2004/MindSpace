@@ -1,5 +1,6 @@
 package com.example.mindspace;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
@@ -32,14 +33,13 @@ public class BindingAdapters {
     @BindingAdapter({"formattedTime", "prefixText"})
     public static void setFormattedTime(TextView view, String isoTime, String prefix) {
 
-        if (isoTime == null || isoTime.isEmpty()) return;
-
+        Log.i("print", "setFormattedTime: " + isoTime);
 
         LocalDateTime date = TimeUtils.IsoDateParser(isoTime);
 
-        String out = TimeUtils.formatFromNow(date);
+        String out = TimeUtils.format(date, "dd MM yyyy hh mm ");
 
-        String text = prefix +" "+ out;
+        String text = prefix + " " + out;
 
         view.setText(text);
 

@@ -2,6 +2,12 @@ package com.example.mindspace;
 
 import androidx.annotation.NonNull;
 
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.mindspace.db.StringListConverter;
 import com.example.mindspace.utils.TimeUtils;
 import com.example.mindspace.utils.Utils;
 
@@ -9,106 +15,152 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Entity(tableName = "thoughts")
+@TypeConverters(StringListConverter.class)
 public class Thought implements Serializable {
 
-
+    @PrimaryKey
+    @NonNull
     private String _id;
+
     private String title;
     private String desc;
     private String occurredAt;
-
-
-    private String createdAt;
-
     private String lastModified;
 
-    private List<String> readsAt;
+    private boolean isDeleted;
+    private boolean isDirty;
 
+    private List<String> readsAt;
     private List<String> tags;
 
 
     public Thought() {
-
+        this._id = Utils.generateShortUUID();
+        this.readsAt = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.isDeleted = false;
+        this.isDirty = true;
     }
+
 
     public Thought(String title, String desc) {
         this._id = Utils.generateShortUUID();
         this.title = title;
         this.desc = desc;
-        this.createdAt = "";
         this.lastModified = "";
+        this.isDirty = true;
         this.readsAt = new ArrayList<String>();
         this.tags = new ArrayList<String>();
     }
 
 
-    public String get_id() {
+    @NonNull
+    public String getId() {
         return _id;
     }
 
-    public String getOccurredAt() {
-        return this.occurredAt;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
+    public void setId(@NonNull String id) {
+        this._id = id;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+        this.isDirty = true;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+        this.isDirty = true;
+    }
+
+    public String getOccurredAt() {
+        return occurredAt;
     }
 
     public void setOccurredAt(String occurredAt) {
         this.occurredAt = occurredAt;
     }
 
-    public String getDesc() {
-        return this.desc;
+    public String getLastModified() {
+        return lastModified;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+        this.isDirty = true;
+    }
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        isDirty = dirty;
+    }
+
+    public List<String> getReadsAt() {
+        return readsAt;
+    }
+
+    public void setReadsAt(List<String> readsAt) {
+        this.readsAt = readsAt;
     }
 
     public List<String> getTags() {
         return tags;
     }
 
-    public Thought setTags(List<String> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
-        return this;
     }
+
+    // ================== Helper Logic ==================
 
     public void addTime() {
         String localTime = TimeUtils.getISOString();
-        if (this.occurredAt ==null || this.occurredAt.trim().contentEquals("")) {
-            this.occurredAt = localTime;
+
+        if (occurredAt == null || occurredAt.trim().isEmpty()) {
+            occurredAt = localTime;
         }
-        this.lastModified = localTime;
-        this.readsAt.add(localTime);
+
+        lastModified = localTime;
+        readsAt.add(localTime);
+        isDirty = true;
     }
 
-    public void updateReadsAt(){
-        String localTime = TimeUtils.getISOString();
-        this.readsAt.add(localTime);
-    }
-
+    // ================== Debug ==================
 
     @NonNull
     @Override
     public String toString() {
-        return "Note{" +
-                "_id='" + _id + '\'' +
+        return "Thought{" +
+                "id='" + _id + '\'' +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
                 ", occurredAt='" + occurredAt + '\'' +
-                ", readsAt='" + readsAt + '\'' +
                 ", lastModified='" + lastModified + '\'' +
-                ", tags=" + tags.toString() +
+                ", readsAt=" + readsAt +
+                ", tags=" + tags +
+                ", isDeleted=" + isDeleted +
+                ", isDirty=" + isDirty +
                 '}';
     }
 

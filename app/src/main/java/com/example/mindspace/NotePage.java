@@ -16,11 +16,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mindspace.api_request.Wrap;
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataResponse;
 import com.example.mindspace.api_response.ResponseConfig;
+import com.example.mindspace.db.AppDatabase;
 import com.example.mindspace.ui_components.BottomSheetComponent;
 import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.CustomLoader;
@@ -46,9 +48,9 @@ public class NotePage extends AppCompatActivity {
     ChipGroup chipGroup;
 
     EditText tag_input;
-    EditText title;
+    EditText thought_title;
 
-    EditText desc;
+    EditText thought_text;
     TextInputLayout tag_input_container;
 
     Button submit_button;
@@ -71,7 +73,6 @@ public class NotePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thought_page);
 
-        LinearLayout root = findViewById(R.id.root);
 
         header = findViewById(R.id.custom_header);
         loader = findViewById(R.id.custom_loader);
@@ -81,8 +82,8 @@ public class NotePage extends AppCompatActivity {
         injectRight();
 
 
-        title = findViewById(R.id.note_title);
-        desc = findViewById(R.id.note_text);
+        thought_title = findViewById(R.id.thought_title);
+        thought_text = findViewById(R.id.thought_text);
         apiService = RetroFitClient.GetRetroFit(this).create(ApiService.class);
 
 
@@ -141,11 +142,9 @@ public class NotePage extends AppCompatActivity {
 
         Map<String, String> times = new LinkedHashMap<>();
 
-        times.put("Title", "Cowsika");
-        times.put("Created", "Harini");
-        times.put("Reads", "Gnanasiri");
-        times.put("Create AT ", ThoughtData.getCreatedAt());
+
         times.put("Occured At", ThoughtData.getOccurredAt());
+        times.put("Last Modified", ThoughtData.getLastModified());
 
 
         for (Map.Entry<String, String> data : times.entrySet()) {
@@ -159,23 +158,41 @@ public class NotePage extends AppCompatActivity {
 
 
     public void submit() {
-        String note_title = new InputValidator(title).setMinLength(3).validate();
-        String note_text = new InputValidator(desc).setMinLength(6).validate();
+        String title = new InputValidator(thought_title).setMinLength(3).validate();
+        String desc = new InputValidator(thought_text).setMinLength(6).validate();
 
-        if (note_title == null || note_text == null) {
+        if (title == null || desc == null) {
             Toast.makeText(NotePage.this, "Title or Content Missing", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ThoughtData.setDesc(note_text.trim());
-        ThoughtData.setTitle(note_title.trim());
+        if (ThoughtData == null) ThoughtData = new Thought();
+
+
+        ThoughtData.setTitle(title.trim());
+        ThoughtData.setDesc(desc.trim());
+
 
         ThoughtData.setTags(tags);
         ThoughtData.addTime();
+        addtoDb();
 
-        CreateNote();
+
+//        ThoughtData.toString();
+
+//        CreateNote();
 
         Log.i("console", ThoughtData.toString());
+    }
+
+    void addtoDb() {
+        new Thread(() -> {
+            AppDatabase db = AppDatabase.get(this);
+            db.thoughtDao().insert(ThoughtData);
+            List<Thought> list = db.thoughtDao().getAll();
+            Log.i("console", "Stored: " + list.size());
+        }).start();
+
     }
 
 
@@ -276,7 +293,8 @@ public class NotePage extends AppCompatActivity {
 
     private void CreateNote() {
 
-        Call<ResponseConfig> call = apiService.patchThought(Wrap.d(ThoughtData), ThoughtData.get_id());
+
+        Call<ResponseConfig> call = apiService.putThought(Wrap.d(ThoughtData), ThoughtData.getId());
 
         call.enqueue(new Callback<ResponseConfig>() {
             @Override
@@ -325,8 +343,8 @@ public class NotePage extends AppCompatActivity {
 
                     ThoughtData = response.body().getData();
 
-                    title.setText(ThoughtData.getTitle());
-                    desc.setText(ThoughtData.getDesc());
+                    thought_title.setText(ThoughtData.getTitle());
+                    thought_text.setText(ThoughtData.getDesc());
                     header.setTitle(ThoughtData.getTitle());
                     tags.clear();
                     tags.addAll(ThoughtData.getTags());
@@ -358,6 +376,9 @@ public class NotePage extends AppCompatActivity {
     }
 
     private void handleHistoryClick() {
+        if (sheet != null && !sheet.isAdded()) {
+            sheet.show(getSupportFragmentManager(), "bottom_sheet");
+        }
     }
 
 
@@ -369,6 +390,7 @@ public class NotePage extends AppCompatActivity {
 
         ImageView historyIcon = new ImageView(this);
         historyIcon.setImageResource(R.drawable.ic_history_icon);
+        historyIcon.setOnClickListener(e -> handleHistoryClick());
         ImageView markIcon = new ImageView(this);
         markIcon.setImageResource(R.drawable.ic_save_icon);
 
