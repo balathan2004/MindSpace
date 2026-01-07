@@ -21,6 +21,7 @@ public class TimeUtils {
     }
 
     public static String formatFromNow(LocalDateTime date) {
+        if(isSameWeek(date))return "This "+ date.getDayOfWeek();
         if (isLastWeek(date)) return "Last Week";
         if (isLastMonth(date)) return "Last Month";
         if (isLastYear(date)) return "Last Year";
@@ -47,6 +48,11 @@ public class TimeUtils {
 
     public static LocalDateTime now() {
         return LocalDateTime.now();
+    }
+
+
+    public static boolean isSameWeek(LocalDateTime t){
+        return t.isBefore(now().minusWeeks(1)) && t.isAfter(now());
     }
 
     public static boolean isLastWeek(LocalDateTime t) {

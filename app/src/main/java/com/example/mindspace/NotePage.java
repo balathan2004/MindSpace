@@ -23,6 +23,8 @@ import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataResponse;
 import com.example.mindspace.api_response.ResponseConfig;
 import com.example.mindspace.db.AppDatabase;
+import com.example.mindspace.db.ThoughtDAO;
+import com.example.mindspace.db.ThoughtRepo;
 import com.example.mindspace.ui_components.BottomSheetComponent;
 import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.CustomLoader;
@@ -46,6 +48,8 @@ import retrofit2.Response;
 public class NotePage extends AppCompatActivity {
 
     ChipGroup chipGroup;
+
+    ThoughtRepo repo;
 
     EditText tag_input;
     EditText thought_title;
@@ -73,6 +77,8 @@ public class NotePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thought_page);
 
+        repo = new ThoughtRepo(this);
+
 
         header = findViewById(R.id.custom_header);
         loader = findViewById(R.id.custom_loader);
@@ -90,7 +96,7 @@ public class NotePage extends AppCompatActivity {
         doc_id = (String) getIntent().getSerializableExtra("doc_id");
 
 
-        getThought(doc_id);
+        getThoughtDb(doc_id);
 
         chipGroup = findViewById(R.id.tag_chip_group);
         tag_input = findViewById(R.id.add_tag);
@@ -189,8 +195,7 @@ public class NotePage extends AppCompatActivity {
         new Thread(() -> {
             AppDatabase db = AppDatabase.get(this);
             db.thoughtDao().insert(ThoughtData);
-            List<Thought> list = db.thoughtDao().getAll();
-            Log.i("console", "Stored: " + list.size());
+
         }).start();
 
     }
@@ -322,13 +327,19 @@ public class NotePage extends AppCompatActivity {
 
     }
 
-    private void getThought(String doc_id) {
-
+    private void getThoughtDb(String doc_id) {
         if (doc_id == null) {
             loader.setVisibility(false);
             return;
         }
-        ;
+
+        repo.getThoughtById(doc_id).observe(this, thought -> {
+            renderUI(thought);
+        });
+    }
+
+    private void getThought(String doc_id) {
+
 
         Call<DataResponse<Thought>> call = apiService.getSingleThought(doc_id);
 
@@ -340,16 +351,8 @@ public class NotePage extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     DataResponse<Thought> res = response.body();
 
+                    renderUI(response.body().getData());
 
-                    ThoughtData = response.body().getData();
-
-                    thought_title.setText(ThoughtData.getTitle());
-                    thought_text.setText(ThoughtData.getDesc());
-                    header.setTitle(ThoughtData.getTitle());
-                    tags.clear();
-                    tags.addAll(ThoughtData.getTags());
-                    renderNameChips();
-                    initSheet();
                 } else {
                     try {
                         Log.i("console", "failure ");
@@ -360,10 +363,6 @@ public class NotePage extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-
-                loader.setVisibility(false);
-
-
             }
 
             @Override
@@ -381,12 +380,23 @@ public class NotePage extends AppCompatActivity {
         }
     }
 
+    public void renderUI(Thought thought) {
+        ThoughtData = thought;
+        thought_title.setText(ThoughtData.getTitle());
+        thought_text.setText(ThoughtData.getDesc());
+        header.setTitle(ThoughtData.getTitle());
+        tags.clear();
+        tags.addAll(ThoughtData.getTags());
+        renderNameChips();
+        initSheet();
+        loader.setVisibility(false);
+    }
+
 
     private void injectRight() {
 
         LinearLayout headerRight = header.getHeaderRight();
         headerRight.removeAllViews();
-
 
         ImageView historyIcon = new ImageView(this);
         historyIcon.setImageResource(R.drawable.ic_history_icon);
@@ -397,6 +407,5 @@ public class NotePage extends AppCompatActivity {
         headerRight.addView(markIcon);
         headerRight.addView(historyIcon);
     }
-
 
 }

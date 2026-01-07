@@ -37,7 +37,7 @@ public class BindingAdapters {
 
         LocalDateTime date = TimeUtils.IsoDateParser(isoTime);
 
-        String out = TimeUtils.format(date, "dd MM yyyy hh mm ");
+        String out = TimeUtils.formatFromNow(date);
 
         String text = prefix + " " + out;
 

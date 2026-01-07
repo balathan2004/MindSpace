@@ -80,15 +80,16 @@ public class Home extends AppCompatActivity {
             swipeRefresh.setRefreshing(false);
         });
 
-        getFrom();
 
 
         add_thought.setOnClickListener(e -> {
             Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
             startActivity(NotePage);
         });
-        loadThoughts();
+//        loadThoughts();
+        observeThoughts();
     }
+
 
 
     public void addNotes(Thought Thought) {
@@ -119,25 +120,10 @@ public class Home extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-                    Log.i("console", "success");
-
                     DataListResponse<Thought> data = response.body();
-                    Log.i("console", "response " + data.getMessage());
 
-                    noteArray.clear();
+                    renderUI(Arrays.asList(data.getData()));
 
-                    noteArray.addAll(Arrays.asList(data.getData()));
-
-//                    addDocs(Arrays.asList(data.getData()));
-
-
-                    note_list.removeAllViews();
-
-                    loader.setVisibility(false);
-
-                    for (Thought note : noteArray) {
-                        addNotes(note);
-                    }
 
                 } else {
                     try {
@@ -160,16 +146,26 @@ public class Home extends AppCompatActivity {
         });
     }
 
-    public List<Thought> getFrom() {
+    private void observeThoughts() {
 
-        LifecycleOwnerKt.getLifecycleScope(this).launch(() -> {
-            repo.getAllThoughts().collect(thoughts -> {
-                renderUI(thoughts);
-                return Unit.INSTANCE;
-            });
+        repo.getAllThoughts().observe(this, thoughts -> {
+
+            renderUI(thoughts);
         });
+    }
 
 
+    private void renderUI(List<Thought> thoughts) {
+
+
+        note_list.removeAllViews();
+
+        for (Thought note : thoughts) {
+            Log.i("console", "local: "+thoughts.toString());
+            addNotes(note);
+        }
+
+        loader.setVisibility(false);
     }
 
 
