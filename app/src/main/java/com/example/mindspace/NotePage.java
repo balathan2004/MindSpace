@@ -158,6 +158,10 @@ public class NotePage extends AppCompatActivity {
             labelRenderer.AttachLabelValue(container, data.getKey(), data.getValue());
         }
 
+        LabelValue labelRenderer = new LabelValue(this);
+        labelRenderer.AttachLabelValue(container, "Reads AT", ThoughtData.getReadsAt());
+
+
         sheet = BottomSheetComponent.newInstance(container);
 
     }
@@ -181,22 +185,10 @@ public class NotePage extends AppCompatActivity {
 
         ThoughtData.setTags(tags);
         ThoughtData.addTime();
-        addtoDb();
 
 
-//        ThoughtData.toString();
+        insertThought();
 
-//        CreateNote();
-
-        Log.i("console", ThoughtData.toString());
-    }
-
-    void addtoDb() {
-        new Thread(() -> {
-            AppDatabase db = AppDatabase.get(this);
-            db.thoughtDao().insert(ThoughtData);
-
-        }).start();
 
     }
 
@@ -337,6 +329,17 @@ public class NotePage extends AppCompatActivity {
             renderUI(thought);
         });
     }
+
+    private void insertThought() {
+        repo.insert(ThoughtData, () -> {
+            Utils.ShowToast(this, "Doc Added");
+
+        }, () -> {
+            Utils.ShowToast(this, "Doc Added");
+        });
+
+    }
+
 
     private void getThought(String doc_id) {
 

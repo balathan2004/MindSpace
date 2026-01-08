@@ -9,17 +9,20 @@
         android:id="@+id/labelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Label"
         android:textColor="#888"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/valueText"
+    <LinearLayout
+        android:id="@+id/valueContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Value"
-        android:textColor="#000"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+
+        <include
+            android:id="@id/valueText"
+            layout="@layout/label_value_value_text" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

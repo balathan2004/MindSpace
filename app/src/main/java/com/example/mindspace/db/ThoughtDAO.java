@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow;
 public interface ThoughtDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Thought thought);
+    public long insert(Thought thought);
 
 
     @Query("SELECT * FROM thoughts ORDER BY lastModified DESC")

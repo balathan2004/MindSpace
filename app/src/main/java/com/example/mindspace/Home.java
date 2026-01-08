@@ -5,33 +5,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.LifecycleOwnerKt;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mindspace.api_response.AuthResponseConfig;
 import com.example.mindspace.api_response.DataListResponse;
 import com.example.mindspace.databinding.ThoughtCardBinding;
-import com.example.mindspace.db.AppDatabase;
 import com.example.mindspace.db.ThoughtRepo;
 import com.example.mindspace.ui_components.CustomHeader;
 import com.example.mindspace.ui_components.CustomLoader;
-import com.example.mindspace.ui_components.LoadingButton;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.Inflater;
 
-import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,7 +40,6 @@ public class Home extends AppCompatActivity {
 
 
     SwipeRefreshLayout swipeRefresh;
-    List<Thought> noteArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +71,6 @@ public class Home extends AppCompatActivity {
         });
 
 
-
         add_thought.setOnClickListener(e -> {
             Intent NotePage = new Intent(this, com.example.mindspace.NotePage.class);
             startActivity(NotePage);
@@ -89,7 +78,6 @@ public class Home extends AppCompatActivity {
 //        loadThoughts();
         observeThoughts();
     }
-
 
 
     public void addNotes(Thought Thought) {
@@ -157,14 +145,11 @@ public class Home extends AppCompatActivity {
 
     private void renderUI(List<Thought> thoughts) {
 
-
         note_list.removeAllViews();
 
         for (Thought note : thoughts) {
-            Log.i("console", "local: "+thoughts.toString());
             addNotes(note);
         }
-
         loader.setVisibility(false);
     }
 
